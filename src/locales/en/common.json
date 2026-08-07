@@ -1,0 +1,9 @@
+{
+  "auth": {
+    "emailAlreadyInUse": "Email is already in use"
+  },
+  "common": {
+    "internalServerError": "Internal server error",
+    "routeNotFound": "Route is not found."
+  }
+}

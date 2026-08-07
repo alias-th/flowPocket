@@ -11,7 +11,7 @@ import {
 import { Category } from "./category.entity";
 import { User } from "./user.entity";
 
-enum Currency {
+enum CategoryCurrency {
   THB = "THB",
   USD = "USD",
 }
@@ -39,11 +39,11 @@ export class Budget {
 
   @Column({
     type: "enum",
-    enum: Currency,
-    default: Currency.THB,
-    enumName: "currency_enum",
+    enum: CategoryCurrency,
+    default: CategoryCurrency.THB,
+    enumName: "category_currency_enum",
   })
-  currency!: Currency;
+  currency!: CategoryCurrency;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt!: Date;

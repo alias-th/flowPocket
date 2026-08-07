@@ -29,6 +29,10 @@ export function initializeDataSource(config: DatabaseConfig): DataSource {
     entities: [Account, Category, Budget, Image, Session, Transaction, User],
     logging: process.env.NODE_ENV !== "production",
     synchronize: false,
+    migrations: [__dirname + "/migrations/**/*{.js,.ts}"],
+    migrationsRun: false,
+    migrationsTableName: "migrations",
+    migrationsTransactionMode: "all",
   });
 
   return appDataSource;

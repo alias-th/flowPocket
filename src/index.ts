@@ -1,7 +1,9 @@
 import "reflect-metadata";
 
 import buildApp from "./app";
+
 import { initializeDataSource } from "./data-source";
+import closeWithGrace from "close-with-grace";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -17,6 +19,7 @@ declare module "fastify" {
 
 const start = async () => {
   const app = await buildApp();
+
   const appDataSource = initializeDataSource(app.config);
 
   try {
@@ -34,6 +37,20 @@ const start = async () => {
     }
     process.exit(1);
   }
+
+  closeWithGrace(async ({ signal, err }) => {
+    app.log.info(`${signal} received, server closing`);
+
+    if (err) {
+      app.log.error({ err }, "server closing with error");
+    }
+
+    await app.close();
+
+    if (appDataSource.isInitialized) {
+      await appDataSource.destroy();
+    }
+  });
 };
 
 start();

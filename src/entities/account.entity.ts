@@ -20,7 +20,7 @@ enum AccountType {
   OTHER = "OTHER",
 }
 
-enum Currency {
+enum AccountCurrency {
   THB = "THB",
   USD = "USD",
 }
@@ -52,11 +52,11 @@ export class Account {
 
   @Column({
     type: "enum",
-    enum: Currency,
-    default: Currency.THB,
-    enumName: "currency_enum",
+    enum: AccountCurrency,
+    default: AccountCurrency.THB,
+    enumName: "account_currency_enum",
   })
-  currency!: Currency;
+  currency!: AccountCurrency;
 
   @Column({
     name: "account_status",
