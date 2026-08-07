@@ -5,13 +5,16 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Account } from "./account.entity";
 import { User } from "./user.entity";
+import { Category } from "./category.entity";
+import { Image } from "./image.entity";
 
-export enum TransactionType {
+enum TransactionType {
   INCOME = "INCOME",
   EXPENSE = "EXPENSE",
   OPENING_BALANCE = "OPENING_BALANCE",
@@ -34,7 +37,11 @@ export class Transaction {
   @Column({ name: "category_id", type: "uuid", nullable: true })
   categoryId!: string | null;
 
-  @Column({ type: "enum", enum: TransactionType })
+  @Column({
+    type: "enum",
+    enum: TransactionType,
+    enumName: "transaction_type_enum",
+  })
   type!: TransactionType;
 
   @Column({ type: "decimal", precision: 15, scale: 2 })
@@ -43,7 +50,7 @@ export class Transaction {
   @Column({ type: "text", nullable: true })
   note!: string | null;
 
-  @Column({ name: "transaction_date", type: "timestamp" })
+  @Column({ name: "transaction_date", type: "timestamptz" })
   transactionDate!: Date;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
@@ -52,11 +59,20 @@ export class Transaction {
   @UpdateDateColumn({ name: "updated_at", type: "timestamptz" })
   updatedAt!: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn({ name: "user_id" })
   user!: User;
 
-  @ManyToOne(() => Account)
+  @ManyToOne(() => Account, (account) => account.transactions)
   @JoinColumn({ name: "account_id" })
   account!: Account;
+
+  @ManyToOne(() => Category, (category) => category.transactions, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "category_id" })
+  category!: Category | null;
+
+  @OneToMany(() => Image, (image) => image.transaction)
+  images!: Image[];
 }

@@ -5,12 +5,14 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./user.entity";
+import { Transaction } from "./transaction.entity";
 
-export enum AccountType {
+enum AccountType {
   BANK = "BANK",
   CASH = "CASH",
   EWALLET = "EWALLET",
@@ -18,12 +20,12 @@ export enum AccountType {
   OTHER = "OTHER",
 }
 
-export enum AccountCurrency {
+enum Currency {
   THB = "THB",
   USD = "USD",
 }
 
-export enum AccountStatus {
+enum AccountStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
 }
@@ -44,21 +46,24 @@ export class Account {
     type: "enum",
     enum: AccountType,
     default: AccountType.BANK,
+    enumName: "account_type_enum",
   })
   type!: AccountType;
 
   @Column({
     type: "enum",
-    enum: AccountCurrency,
-    default: AccountCurrency.THB,
+    enum: Currency,
+    default: Currency.THB,
+    enumName: "currency_enum",
   })
-  currency!: AccountCurrency;
+  currency!: Currency;
 
   @Column({
     name: "account_status",
     type: "enum",
     enum: AccountStatus,
     default: AccountStatus.ACTIVE,
+    enumName: "account_status_enum",
   })
   accountStatus!: AccountStatus;
 
@@ -71,4 +76,7 @@ export class Account {
   @ManyToOne(() => User, (user) => user.accounts)
   @JoinColumn({ name: "user_id" })
   user!: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.account)
+  transactions!: Transaction[];
 }

@@ -33,8 +33,8 @@ CREATE TABLE "users" (
   "password_hash" varchar NOT NULL,
   "name" varchar NOT NULL,
   "preferred_language" language NOT NULL DEFAULT 'TH',
-  "created_at" timestamp NOT NULL DEFAULT ( now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT ( now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "accounts" (
@@ -44,8 +44,8 @@ CREATE TABLE "accounts" (
   "type" account_type NOT NULL DEFAULT 'BANK',
   "currency" account_currency NOT NULL DEFAULT 'THB',
   "account_status" account_status NOT NULL DEFAULT 'ACTIVE',
-  "created_at" timestamp NOT NULL DEFAULT ( now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT ( now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "categories" (
@@ -54,8 +54,8 @@ CREATE TABLE "categories" (
   "name" varchar NOT NULL,
   "type" transaction_type NOT NULL,
   "category_status" bool NOT NULL DEFAULT true,
-  "created_at" timestamp NOT NULL DEFAULT (now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "transactions" (
@@ -66,9 +66,9 @@ CREATE TABLE "transactions" (
   "type" transaction_type NOT NULL,
   "amount" decimal(15,2) NOT NULL,
   "note" text,
-  "transaction_date" timestamp NOT NULL,
-  "created_at" timestamp NOT NULL DEFAULT (now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
+  "transaction_date" timestamptz NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "sessions" (
@@ -78,9 +78,9 @@ CREATE TABLE "sessions" (
   "device_name" varchar,
   "user_agent" text,
   "ip_address" varchar,
-  "expires_at" timestamp NOT NULL,
-  "revoked_at" timestamp,
-  "created_at" timestamp NOT NULL DEFAULT (now())
+  "expires_at" timestamptz NOT NULL,
+  "revoked_at" timestamptz,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "images" (
@@ -90,7 +90,7 @@ CREATE TABLE "images" (
   "file_name" varchar NOT NULL,
   "mime_type" varchar,
   "file_size" integer,
-  "created_at" timestamp NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "budgets" (
@@ -101,8 +101,8 @@ CREATE TABLE "budgets" (
   "month" int NOT NULL,
   "year" int NOT NULL,
   "currency" account_currency NOT NULL DEFAULT 'THB',
-  "created_at" timestamp NOT NULL DEFAULT (now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE INDEX ON "accounts" ("user_id");

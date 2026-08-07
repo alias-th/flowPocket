@@ -7,8 +7,12 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Account } from "./account.entity";
+import { Transaction } from "./transaction.entity";
+import { Category } from "./category.entity";
+import { Session } from "./session.entity";
+import { Budget } from "./budget.entity";
 
-export enum PreferredLanguage {
+enum PreferredLanguage {
   TH = "TH",
   EN = "EN",
 }
@@ -32,6 +36,7 @@ export class User {
     type: "enum",
     enum: PreferredLanguage,
     default: PreferredLanguage.TH,
+    enumName: "preferred_language_enum",
   })
   preferredLanguage!: PreferredLanguage;
 
@@ -43,4 +48,16 @@ export class User {
 
   @OneToMany(() => Account, (account) => account.user)
   accounts!: Account[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+  transactions!: Transaction[];
+
+  @OneToMany(() => Category, (category) => category.user)
+  categories!: Category[];
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions!: Session[];
+
+  @OneToMany(() => Budget, (budget) => budget.user)
+  budgets!: Budget[];
 }
