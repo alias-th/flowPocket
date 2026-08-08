@@ -21,7 +21,7 @@ interface CreateAccountBody {
   name: string;
   type: AccountType;
   currency?: AccountCurrency;
-  openingBalance: string;
+  openingBalance: number;
 }
 export const createNewAccount = async (
   request: FastifyRequest<{ Body: CreateAccountBody }>,
@@ -53,7 +53,7 @@ export const createNewAccount = async (
       accountId: savedAccount.id,
       categoryId: null,
       type: TransactionType.OPENING_BALANCE,
-      amount: body.openingBalance,
+      amount: String(body.openingBalance),
       note: "Opening balance",
       transactionDate: new Date(),
     });
