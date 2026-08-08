@@ -22,6 +22,13 @@ const categoryRoutes = async function (fastify: FastifyInstance) {
     preHandler: fastify.authentication,
     handler: categoryController.updateCategory,
   });
+
+  fastify.route({
+    method: "DELETE",
+    url: "/:id",
+    preHandler: fastify.authentication,
+    handler: categoryController.deleteCategory,
+  });
 };
 
 export default categoryRoutes;
