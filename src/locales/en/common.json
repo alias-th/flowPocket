@@ -6,7 +6,18 @@
     "preferredLanguage": "Preferred language",
     "type": "Type",
     "categoryStatus": "Category status",
-    "includeInactive": "Include inactive"
+    "includeInactive": "Include inactive",
+    "accountId": "Account",
+    "categoryId": "Category",
+    "amount": "Amount",
+    "note": "Note",
+    "transactionDate": "Transaction date",
+    "page": "Page",
+    "limit": "Limit",
+    "month": "Month",
+    "year": "Year",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "validation": {
     "invalidRequest": "Some information is invalid. Please check and try again.",
@@ -68,6 +79,23 @@
     },
     "notFound": "Category not found.",
     "alreadyExists": "A category with this name already exists."
+  },
+  "transaction": {
+    "create": {
+      "success": "Transaction created successfully."
+    },
+    "get": {
+      "success": "Transactions retrieved successfully."
+    },
+    "update": {
+      "success": "Transaction updated successfully."
+    },
+    "delete": {
+      "success": "Transaction deleted successfully."
+    },
+    "notFound": "Transaction not found.",
+    "categoryTypeMismatch": "Category type must match transaction type.",
+    "openingBalanceNotEditable": "Opening balance transactions cannot be edited."
   },
   "common": {
     "internalServerError": "Internal server error",

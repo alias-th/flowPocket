@@ -10,6 +10,7 @@ import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { success } from "../utils/response";
+import { getUserId } from "../utils/common";
 
 interface CategoryParams {
   id: string;
@@ -30,14 +31,6 @@ interface GetCategoriesQuery {
 interface UpdateCategoryBody {
   name?: string;
   categoryStatus?: boolean;
-}
-
-function getUserId(request: FastifyRequest): string {
-  if (!request.userId) {
-    throw new AppError(401, request.t("auth.unauthorized"));
-  }
-
-  return request.userId;
 }
 
 export const createCategory = async (

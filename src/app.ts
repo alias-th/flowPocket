@@ -11,6 +11,10 @@ import accountRoutes from "./routes/account";
 import { fail } from "./utils/response";
 import protectRoutePlugin from "./plugins/protectRoute.plugin";
 import categoryRoutes from "./routes/category";
+import transactionRoutes from "./routes/transaction";
+import imageRoutes from "./routes/image";
+import budgetRoutes from "./routes/budget";
+import reportRoutes from "./routes/report";
 
 const envOptions = {
   dotenv: true,
@@ -96,6 +100,10 @@ async function buildApp() {
   fastify.register(authRoutes, { prefix: `${apiVersion}/auth` });
   fastify.register(accountRoutes, { prefix: `${apiVersion}/accounts` });
   fastify.register(categoryRoutes, { prefix: `${apiVersion}/categories` });
+  fastify.register(transactionRoutes, { prefix: `${apiVersion}/transactions` });
+  fastify.register(imageRoutes, { prefix: `${apiVersion}/images` });
+  fastify.register(budgetRoutes, { prefix: `${apiVersion}/budgets` });
+  fastify.register(reportRoutes, { prefix: `${apiVersion}/reports` });
 
   // Set global error handlers
   fastify.setErrorHandler(async (error: any, request, reply) => {

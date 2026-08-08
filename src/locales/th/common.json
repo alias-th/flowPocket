@@ -6,7 +6,18 @@
     "preferredLanguage": "ภาษาที่ต้องการ",
     "type": "ประเภท",
     "categoryStatus": "สถานะหมวดหมู่",
-    "includeInactive": "รวมหมวดหมู่ที่ปิดใช้งาน"
+    "includeInactive": "รวมหมวดหมู่ที่ปิดใช้งาน",
+    "accountId": "บัญชี",
+    "categoryId": "หมวดหมู่",
+    "amount": "จำนวนเงิน",
+    "note": "หมายเหตุ",
+    "transactionDate": "วันที่ทำรายการ",
+    "page": "หน้า",
+    "limit": "จำนวนรายการต่อหน้า",
+    "month": "เดือน",
+    "year": "ปี",
+    "startDate": "วันที่เริ่มต้น",
+    "endDate": "วันที่สิ้นสุด"
   },
   "validation": {
     "invalidRequest": "ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง",
@@ -68,6 +79,23 @@
     },
     "notFound": "ไม่พบหมวดหมู่",
     "alreadyExists": "มีหมวดหมู่ชื่อนี้อยู่แล้ว"
+  },
+  "transaction": {
+    "create": {
+      "success": "สร้างรายการสำเร็จ"
+    },
+    "get": {
+      "success": "ดึงรายการธุรกรรมสำเร็จ"
+    },
+    "update": {
+      "success": "อัปเดตรายการสำเร็จ"
+    },
+    "delete": {
+      "success": "ลบรายการสำเร็จ"
+    },
+    "notFound": "ไม่พบรายการ",
+    "categoryTypeMismatch": "ประเภทหมวดหมู่ต้องตรงกับประเภทรายการ",
+    "openingBalanceNotEditable": "ไม่สามารถแก้ไขรายการยอดยกมาได้"
   },
   "common": {
     "internalServerError": "เกิดข้อผิดพลาดภายในระบบ",
