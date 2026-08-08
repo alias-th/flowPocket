@@ -19,6 +19,7 @@ const envOptions = {
       "POSTGRES_PASSWORD",
       "POSTGRES_DB",
       "POSTGRES_PORT",
+      "SESSION_TOKEN_SECRET",
     ],
     properties: {
       POSTGRES_HOST: {
@@ -35,6 +36,10 @@ const envOptions = {
       },
       POSTGRES_PORT: {
         type: "string",
+      },
+      SESSION_TOKEN_SECRET: {
+        type: "string",
+        minLength: 32,
       },
     },
   },

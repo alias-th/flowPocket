@@ -8,4 +8,9 @@ export const registerSchema = Joi.object({
   preferredLanguage: Joi.string()
     .valid(...Object.values(PreferredLanguage))
     .default(PreferredLanguage.TH),
+}).unknown(false); // ไม่อนุญาต field อื่นนอกเหนือจากที่ประกาศ
+
+export const loginSchema = Joi.object({
+  email: Joi.string().trim().lowercase().email().required(),
+  password: Joi.string().required(),
 }).unknown(false);

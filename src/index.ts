@@ -13,6 +13,7 @@ declare module "fastify" {
       POSTGRES_PASSWORD: string;
       POSTGRES_DB: string;
       POSTGRES_PORT: string;
+      SESSION_TOKEN_SECRET: string;
     };
   }
 }
