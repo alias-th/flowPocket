@@ -8,6 +8,7 @@ import Backend from "i18next-fs-backend";
 import middleware from "i18next-http-middleware";
 import authRoutes from "./routes/auth";
 import { fail } from "./utils/response";
+import protectRoutePlugin from "./plugins/protectRoute.plugin";
 
 const envOptions = {
   dotenv: true,
@@ -86,6 +87,8 @@ async function buildApp() {
   });
 
   fastify.register(middleware.plugin, { i18next });
+  fastify.register(protectRoutePlugin);
+  fastify.decorateRequest("userId", "");
 
   // Register routes
   const apiVersion = "/api/v1";

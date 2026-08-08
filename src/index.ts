@@ -4,6 +4,7 @@ import buildApp from "./app";
 
 import { initializeDataSource } from "./data-source";
 import closeWithGrace from "close-with-grace";
+import { FastifyReply } from "fastify";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -15,6 +16,12 @@ declare module "fastify" {
       POSTGRES_PORT: string;
       SESSION_TOKEN_SECRET: string;
     };
+
+    authentication(request: FastifyRequest, reply: FastifyReply): void;
+  }
+
+  interface FastifyRequest {
+    userId: string;
   }
 }
 

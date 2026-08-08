@@ -7,8 +7,8 @@ import { PreferredLanguage, User } from "../entities/user.entity";
 import { AppError } from "../utils/app-error";
 import bcrypt from "bcrypt";
 import { UAParser } from "ua-parser-js";
-import crypto from "node:crypto";
 import { Session } from "../entities/session.entity";
+import { generateSessionToken } from "../utils/token";
 
 interface RegisterBody {
   name: string;
@@ -134,18 +134,7 @@ export const login = async (
   );
 };
 
-function generateSessionToken(secret: string): {
-  rawToken: string;
-  hashedToken: string;
-} {
-  const rawToken = crypto.randomBytes(32).toString("base64url");
-  const hashedToken = hashToken(rawToken, secret);
-  return {
-    rawToken,
-    hashedToken,
-  };
-}
-
-function hashToken(token: string, secret: string) {
-  return crypto.createHmac("sha256", secret).update(token).digest("hex");
-}
+export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
+  console.log(request.userId, "request.userId");
+  return reply.code(200).send();
+};
