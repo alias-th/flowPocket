@@ -296,6 +296,39 @@
 
 ### POST /categories
 
+1. Extract session token from the `Authorization: Bearer <token>` header.
+2. If the token is missing or malformed, return `401 UNAUTHORIZED`.
+3. Hash the session token.
+4. Find an active session.
+   - `token_hash` matches the hashed token
+   - `revoked_at IS NULL`
+   - `expires_at > now()`
+5. If no active session is found, return `401 UNAUTHORIZED`.
+6. Validate request body.
+   - Allow only `name` and `type`
+   - `name` is required and must not be blank
+   - `name` must not exceed 100 characters
+   - `type` must be `INCOME` or `EXPENSE`
+   - If invalid, return `400 INVALID_REQUEST_BODY`
+
+````json
+{
+  "name": "Food",
+  "type": "EXPENSE"
+}
+7. Normalize `name` by trimming whitespace.
+8. Check whether a category with the same `name` already exists for the
+   authenticated user.
+   - `categories.user_id` equals authenticated `user_id`
+   - `categories.name` equals normalized `name`
+9. If a duplicate category exists, return `409 CATEGORY_ALREADY_EXISTS`.
+10. Create a category with:
+    - `user_id`: authenticated `user_id`
+    - `name`: normalized `name`
+    - `type`: request `type`
+    - `category_status`: `true`
+11. Return `201 CREATED`.
+
 ### GET /categories
 
 1. Extract session token from the `Authorization: Bearer <token>` header.
@@ -345,7 +378,7 @@
     }
   }
 }
-```
+````
 
 ### PATCH /categories/:id
 
@@ -368,7 +401,7 @@
    - `category_status` must be true or false
    - If invalid, return `400 INVALID_REQUEST_BODY`
 8. Normalize `name` when provided, for example trim whitespace.
-9. Check for an active category with the same `name` and `type` owned by
+9. Check for a category with the same `name` owned by
    the authenticated user, excluding the current category.
 10. If a duplicate category exists, return `409 CATEGORY_ALREADY_EXISTS`.
 11. Find and update the category where:

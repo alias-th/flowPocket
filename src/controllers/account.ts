@@ -7,7 +7,9 @@ import {
 } from "../entities/account.entity";
 import {
   createAccountSchema,
+  idParamSchema,
   getAccountsSchema,
+  updateAccountSchema,
 } from "../schemas/account.schema";
 import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
@@ -41,7 +43,7 @@ export const createNewAccount = async (
       userId: userId,
       name: body.name,
       type: body.type,
-      currency: body.currency ?? AccountCurrency.THB,
+      currency: AccountCurrency.THB, // ยังไม่รองรับ
     });
 
     const savedAccount = await manager.save(account);
@@ -146,4 +148,93 @@ export const getAccounts = async (
       },
     }),
   );
+};
+
+interface UpdateAccountBody {
+  name?: string;
+  type?: AccountType;
+  accountStatus?: AccountStatus;
+}
+interface AccountParams {
+  id: string;
+}
+
+export const updateAccount = async (
+  request: FastifyRequest<{ Params: AccountParams; Body: UpdateAccountBody }>,
+  reply: FastifyReply,
+) => {
+  // 1. Validate params and body
+  const params = validateAndThrowError<AccountParams>(
+    idParamSchema,
+    request.params,
+    request.t,
+  );
+  const body = validateAndThrowError<UpdateAccountBody>(
+    updateAccountSchema,
+    request.body,
+    request.t,
+  );
+  const userId = request.userId;
+  if (!userId) {
+    throw new AppError(401, request.t("auth.unauthorized"));
+  }
+
+  // 2. Update account
+  const datasource = getAppDataSource();
+  const account = await datasource.manager.findOneBy(Account, {
+    id: params.id,
+    userId,
+  });
+  if (!account) {
+    throw new AppError(404, request.t("account.notFound"));
+  }
+
+  // copy จากซ้ายไปขวา และตัวหลังทับตัวก่อนถ้า key ซ้ำ
+  Object.assign(account, body);
+  const updatedAccount = await datasource.manager.save(account);
+
+  return reply.code(200).send(
+    success(request.t("account.update.success"), {
+      id: updatedAccount.id,
+      name: updatedAccount.name,
+      type: updatedAccount.type,
+      currency: updatedAccount.currency,
+      accountStatus: updatedAccount.accountStatus,
+    }),
+  );
+};
+
+export const deleteAccount = async (
+  request: FastifyRequest<{ Params: AccountParams }>,
+  reply: FastifyReply,
+) => {
+  // Validate param
+  const params = validateAndThrowError<AccountParams>(
+    idParamSchema,
+    request.params,
+    request.t,
+  );
+
+  // Check user
+  const userId = request.userId;
+  if (!userId) {
+    throw new AppError(401, request.t("auth.unauthorized"));
+  }
+
+  // Find the active account
+  const datasource = getAppDataSource();
+  const account = await datasource.manager.findOneBy(Account, {
+    id: params.id,
+    userId,
+    accountStatus: AccountStatus.ACTIVE,
+  });
+  if (!account) {
+    throw new AppError(404, request.t("account.notFound"));
+  }
+
+  // Soft-delete the account by updating
+  account.accountStatus = AccountStatus.INACTIVE;
+  await datasource.manager.save(account);
+
+  return reply.code(200).send(success(request.t("account.delete.success")));
 };

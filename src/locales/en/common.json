@@ -3,7 +3,10 @@
     "email": "Email",
     "name": "Name",
     "password": "Password",
-    "preferredLanguage": "Preferred language"
+    "preferredLanguage": "Preferred language",
+    "type": "Type",
+    "categoryStatus": "Category status",
+    "includeInactive": "Include inactive"
   },
   "validation": {
     "invalidRequest": "Some information is invalid. Please check and try again.",
@@ -49,6 +52,22 @@
     },
     "notFound": "Account not found.",
     "accessDenied": "You do not have access to this account."
+  },
+  "category": {
+    "create": {
+      "success": "Category created successfully."
+    },
+    "get": {
+      "success": "Categories retrieved successfully."
+    },
+    "update": {
+      "success": "Category updated successfully."
+    },
+    "delete": {
+      "success": "Category deleted successfully."
+    },
+    "notFound": "Category not found.",
+    "alreadyExists": "A category with this name already exists."
   },
   "common": {
     "internalServerError": "Internal server error",

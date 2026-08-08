@@ -13,7 +13,7 @@ import { Transaction } from "./transaction.entity";
 import { User } from "./user.entity";
 import { Budget } from "./budget.entity";
 
-enum CategoryType {
+export enum CategoryType {
   INCOME = "INCOME",
   EXPENSE = "EXPENSE",
 }

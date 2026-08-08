@@ -3,7 +3,10 @@
     "email": "อีเมล",
     "name": "ชื่อ",
     "password": "รหัสผ่าน",
-    "preferredLanguage": "ภาษาที่ต้องการ"
+    "preferredLanguage": "ภาษาที่ต้องการ",
+    "type": "ประเภท",
+    "categoryStatus": "สถานะหมวดหมู่",
+    "includeInactive": "รวมหมวดหมู่ที่ปิดใช้งาน"
   },
   "validation": {
     "invalidRequest": "ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง",
@@ -49,6 +52,22 @@
     },
     "notFound": "ไม่พบบัญชี",
     "accessDenied": "คุณไม่มีสิทธิ์เข้าถึงบัญชีนี้"
+  },
+  "category": {
+    "create": {
+      "success": "สร้างหมวดหมู่สำเร็จ"
+    },
+    "get": {
+      "success": "ดึงรายการหมวดหมู่สำเร็จ"
+    },
+    "update": {
+      "success": "อัปเดตหมวดหมู่สำเร็จ"
+    },
+    "delete": {
+      "success": "ลบหมวดหมู่สำเร็จ"
+    },
+    "notFound": "ไม่พบหมวดหมู่",
+    "alreadyExists": "มีหมวดหมู่ชื่อนี้อยู่แล้ว"
   },
   "common": {
     "internalServerError": "เกิดข้อผิดพลาดภายในระบบ",
