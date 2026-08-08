@@ -148,3 +148,26 @@ export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
 
   return reply.code(200).send(success(request.t("auth.logout.success")));
 };
+
+export const me = async (request: FastifyRequest, reply: FastifyReply) => {
+  const datasource = getAppDataSource();
+  const userId = request.userId;
+  const user = await datasource.manager.findOne(User, {
+    where: {
+      id: userId ?? "",
+    },
+  });
+  if (!user) {
+    throw new AppError(401, request.t("auth.userNotFound"));
+  }
+
+  return reply.code(200).send(
+    success(request.t("auth.me.success"), {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      preferredLanguage: user.preferredLanguage,
+      createdAt: user.createdAt,
+    }),
+  );
+};

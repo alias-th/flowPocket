@@ -10,6 +10,12 @@ const authRoutes = async function (fastify: FastifyInstance) {
     preHandler: fastify.authentication,
     handler: authController.logout,
   });
+  fastify.route({
+    method: "GET",
+    url: "/me",
+    preHandler: fastify.authentication,
+    handler: authController.me,
+  });
 };
 
 export default authRoutes;

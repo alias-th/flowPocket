@@ -18,6 +18,7 @@
   "auth": {
     "emailAlreadyInUse": "Email is already in use.",
     "unauthorized": "Your session is invalid or has expired. Please sign in again.",
+    "userNotFound": "User not found.",
     "register": {
       "success": "Your account has been created successfully.",
       "emailAlreadyInUse": "This email address is already in use."
