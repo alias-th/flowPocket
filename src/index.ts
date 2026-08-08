@@ -21,7 +21,8 @@ declare module "fastify" {
   }
 
   interface FastifyRequest {
-    userId: string;
+    userId: string | null;
+    sessionId: string | null;
   }
 }
 

@@ -8,6 +8,9 @@ import { AppError } from "../utils/app-error";
 
 const protectRoutePlugin: FastifyPluginCallback = fp(
   function (fastify, _opts, done) {
+    fastify.decorateRequest("userId", null);
+    fastify.decorateRequest("sessionId", null);
+
     fastify.decorate(
       "authentication",
       async function (request: FastifyRequest, _reply: FastifyReply) {
@@ -36,6 +39,7 @@ const protectRoutePlugin: FastifyPluginCallback = fp(
         }
 
         request.userId = session.userId;
+        request.sessionId = session.id;
       },
     );
 

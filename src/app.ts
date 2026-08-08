@@ -88,7 +88,6 @@ async function buildApp() {
 
   fastify.register(middleware.plugin, { i18next });
   fastify.register(protectRoutePlugin);
-  fastify.decorateRequest("userId", "");
 
   // Register routes
   const apiVersion = "/api/v1";

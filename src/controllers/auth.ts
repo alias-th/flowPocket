@@ -135,6 +135,16 @@ export const login = async (
 };
 
 export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
-  console.log(request.userId, "request.userId");
-  return reply.code(200).send();
+  const datasource = getAppDataSource();
+  const sessionId = request.sessionId;
+  const userId = request.userId;
+  await datasource.manager.update(
+    Session,
+    { id: sessionId, userId: userId },
+    {
+      revokedAt: new Date(),
+    },
+  );
+
+  return reply.code(200).send(success(request.t("auth.logout.success")));
 };
