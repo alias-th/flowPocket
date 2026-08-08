@@ -14,7 +14,7 @@ import { User } from "./user.entity";
 import { Category } from "./category.entity";
 import { Image } from "./image.entity";
 
-enum TransactionType {
+export enum TransactionType {
   INCOME = "INCOME",
   EXPENSE = "EXPENSE",
   OPENING_BALANCE = "OPENING_BALANCE",

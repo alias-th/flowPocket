@@ -34,6 +34,22 @@
       "success": "Current user retrieved successfully."
     }
   },
+  "account": {
+    "create": {
+      "success": "Account created successfully."
+    },
+    "get": {
+      "success": "Accounts retrieved successfully."
+    },
+    "update": {
+      "success": "Account updated successfully."
+    },
+    "delete": {
+      "success": "Account deleted successfully."
+    },
+    "notFound": "Account not found.",
+    "accessDenied": "You do not have access to this account."
+  },
   "common": {
     "internalServerError": "Internal server error",
     "routeNotFound": "Route is not found."

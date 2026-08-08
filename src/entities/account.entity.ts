@@ -12,7 +12,7 @@ import {
 import { User } from "./user.entity";
 import { Transaction } from "./transaction.entity";
 
-enum AccountType {
+export enum AccountType {
   BANK = "BANK",
   CASH = "CASH",
   EWALLET = "EWALLET",
@@ -20,12 +20,12 @@ enum AccountType {
   OTHER = "OTHER",
 }
 
-enum AccountCurrency {
+export enum AccountCurrency {
   THB = "THB",
   USD = "USD",
 }
 
-enum AccountStatus {
+export enum AccountStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
 }

@@ -7,6 +7,7 @@ import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import middleware from "i18next-http-middleware";
 import authRoutes from "./routes/auth";
+import accountRoutes from "./routes/account";
 import { fail } from "./utils/response";
 import protectRoutePlugin from "./plugins/protectRoute.plugin";
 
@@ -92,6 +93,7 @@ async function buildApp() {
   // Register routes
   const apiVersion = "/api/v1";
   fastify.register(authRoutes, { prefix: `${apiVersion}/auth` });
+  fastify.register(accountRoutes, { prefix: `${apiVersion}/account` });
 
   // Set global error handlers
   fastify.setErrorHandler(async (error: any, request, reply) => {
