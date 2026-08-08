@@ -1,6 +1,36 @@
 {
+  "fields": {
+    "email": "อีเมล",
+    "name": "ชื่อ",
+    "password": "รหัสผ่าน",
+    "preferredLanguage": "ภาษาที่ต้องการ"
+  },
+  "validation": {
+    "invalidRequest": "ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง",
+    "invalid": "{{field}} ไม่ถูกต้อง",
+    "required": "กรุณาระบุ{{field}}",
+    "email": "กรุณาระบุอีเมลให้ถูกต้อง",
+    "minLength": "{{field}}ต้องมีอย่างน้อย {{limit}} ตัวอักษร",
+    "maxLength": "{{field}}ต้องมีความยาวไม่เกิน {{limit}} ตัวอักษร",
+    "allowedValues": "{{field}}มีค่าที่ระบบไม่รองรับ",
+    "unknownField": "มีข้อมูลที่ระบบไม่รองรับ"
+  },
   "auth": {
-    "emailAlreadyInUse": "อีเมลนี้ถูกใช้งานแล้ว"
+    "emailAlreadyInUse": "อีเมลนี้ถูกใช้งานแล้ว",
+    "register": {
+      "success": "สร้างบัญชีสำเร็จแล้ว",
+      "emailAlreadyInUse": "อีเมลนี้ถูกใช้งานแล้ว"
+    },
+    "login": {
+      "success": "เข้าสู่ระบบสำเร็จ",
+      "invalidCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+    },
+    "logout": {
+      "success": "ออกจากระบบสำเร็จ"
+    },
+    "me": {
+      "success": "ดึงข้อมูลผู้ใช้ปัจจุบันสำเร็จ"
+    }
   },
   "common": {
     "internalServerError": "เกิดข้อผิดพลาดภายในระบบ",

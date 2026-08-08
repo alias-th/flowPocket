@@ -1,6 +1,36 @@
 {
+  "fields": {
+    "email": "Email",
+    "name": "Name",
+    "password": "Password",
+    "preferredLanguage": "Preferred language"
+  },
+  "validation": {
+    "invalidRequest": "Some information is invalid. Please check and try again.",
+    "invalid": "{{field}} is invalid.",
+    "required": "{{field}} is required.",
+    "email": "Enter a valid email address.",
+    "minLength": "{{field}} must be at least {{limit}} characters long.",
+    "maxLength": "{{field}} must not exceed {{limit}} characters.",
+    "allowedValues": "{{field}} has an unsupported value.",
+    "unknownField": "The submitted field is not allowed."
+  },
   "auth": {
-    "emailAlreadyInUse": "Email is already in use"
+    "emailAlreadyInUse": "Email is already in use.",
+    "register": {
+      "success": "Your account has been created successfully.",
+      "emailAlreadyInUse": "This email address is already in use."
+    },
+    "login": {
+      "success": "Login successful.",
+      "invalidCredentials": "Email or password is incorrect."
+    },
+    "logout": {
+      "success": "Logout successful."
+    },
+    "me": {
+      "success": "Current user retrieved successfully."
+    }
   },
   "common": {
     "internalServerError": "Internal server error",

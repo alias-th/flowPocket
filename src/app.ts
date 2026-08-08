@@ -96,6 +96,7 @@ async function buildApp() {
     return fail(
       statusCode >= 500 ? "Internal server error" : error.message,
       statusCode,
+      error.details,
     );
   });
   fastify.setNotFoundHandler(async (_request, reply) => {

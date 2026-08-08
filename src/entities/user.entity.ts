@@ -12,7 +12,7 @@ import { Category } from "./category.entity";
 import { Session } from "./session.entity";
 import { Budget } from "./budget.entity";
 
-enum PreferredLanguage {
+export enum PreferredLanguage {
   TH = "TH",
   EN = "EN",
 }

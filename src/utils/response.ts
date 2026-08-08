@@ -7,6 +7,10 @@ export type ApiErrorResponse = {
   error: {
     message: string;
     statusCode: number;
+    details?: {
+      field: string;
+      message: string;
+    }[];
   };
 };
 
@@ -22,11 +26,24 @@ export const success = <T>(message: string, data?: T): ApiResponse<T> => {
   return response;
 };
 
-export const fail = (message: string, statusCode: number): ApiErrorResponse => {
+export const fail = (
+  message: string,
+  statusCode: number,
+  details?: {
+    field: string;
+    message: string;
+  }[],
+): ApiErrorResponse => {
+  const error: ApiErrorResponse["error"] = {
+    message,
+    statusCode,
+  };
+
+  if (details !== undefined) {
+    error.details = details;
+  }
+
   return {
-    error: {
-      message,
-      statusCode,
-    },
+    error,
   };
 };
