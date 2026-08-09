@@ -447,7 +447,6 @@ Request body:
   "amount": 5000,
   "month": 8,
   "year": 2026
-  "currency" :"THB"
 }
 ```
 

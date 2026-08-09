@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./category.entity";
@@ -16,6 +17,13 @@ enum CategoryCurrency {
   USD = "USD",
 }
 
+// กัน concurrency req, กันรายการซ้ำ
+@Unique("UQ_budget_user_category_period", [
+  "userId",
+  "categoryId",
+  "month",
+  "year",
+])
 @Entity({ name: "budgets" })
 export class Budget {
   @PrimaryGeneratedColumn("uuid")

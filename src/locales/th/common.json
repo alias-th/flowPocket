@@ -113,6 +113,17 @@
     "categoryTypeMismatch": "ประเภทหมวดหมู่ต้องตรงกับประเภทรายการ",
     "openingBalanceNotEditable": "ไม่สามารถแก้ไขรายการยอดยกมาได้"
   },
+  "budget": {
+    "create": {
+      "success": "สร้างงบประมาณสำเร็จ"
+    },
+    "get": {
+      "success": "ดึงรายการงบประมาณสำเร็จ"
+    },
+    "notFound": "ไม่พบงบประมาณ",
+    "expenseCategoryNotFound": "ไม่พบหมวดหมู่รายจ่ายที่เปิดใช้งาน",
+    "alreadyExists": "มีงบประมาณสำหรับหมวดหมู่และช่วงเวลานี้อยู่แล้ว"
+  },
   "common": {
     "internalServerError": "เกิดข้อผิดพลาดภายในระบบ",
     "routeNotFound": "ไม่พบเส้นทางที่เรียกใช้"

@@ -943,40 +943,113 @@
 }
 ```
 
+### GET /reports/daily-allowance
+
+1. Extract session token from the `Authorization: Bearer <token>` header.
+2. If the token is missing or malformed, return `401 UNAUTHORIZED`.
+3. Hash the session token.
+4. Find an active session and its associated user by joining
+   `sessions.user_id` with `users.id`.
+   - `token_hash` matches the hashed token
+   - `revoked_at IS NULL`
+   - `expires_at > now()`
+5. If no active session and user are found, return `401 UNAUTHORIZED`.
+6. Get the current date and time using the application time zone
+   (`Asia/Bangkok`).
+7. Calculate the current period:
+   - `month`: current month
+   - `year`: current year
+   - `startOfMonth`: the first day of the current month at `00:00:00`
+   - `now`: current date and time
+   - `daysRemaining`: number of calendar days from today through the last day
+     of the current month, including today
+8. Find transactions owned by the authenticated user where:
+   - `transactions.user_id` equals authenticated `user_id`
+   - `transaction_date >= startOfMonth`
+   - `transaction_date <= now`
+   - `type` is `INCOME` or `EXPENSE`
+   - Do not include `OPENING_BALANCE`
+   - Join `accounts` to obtain each transaction currency
+   - Do not exclude historical transactions when their account is inactive
+9. Group transaction totals by account currency.
+10. Calculate the following for each currency:
+    - `totalIncome`: sum of `INCOME`; return `0` when none exist
+    - `totalExpense`: sum of `EXPENSE`; return `0` when none exist
+    - `remainingAmount = totalIncome - totalExpense`
+    - `dailyAllowance = max(remainingAmount, 0) / daysRemaining`
+    - Round `dailyAllowance` to 2 decimal places
+11. If no matching transactions exist, return an empty `items` array.
+12. Return `200 OK`.
+
+```json
+{
+  "message": "Daily allowance retrieved successfully",
+  "data": {
+    "period": {
+      "month": 8,
+      "year": 2026,
+      "daysRemaining": 10
+    },
+    "items": [
+      {
+        "currency": "THB",
+        "totalIncome": 500,
+        "totalExpense": 300,
+        "remainingAmount": 200,
+        "dailyAllowance": 20
+      }
+    ]
+  }
+}
+```
+
 ### GET /reports/daily-budget
 
 1. Extract session token from the `Authorization: Bearer <token>` header.
 2. If the token is missing or malformed, return `401 UNAUTHORIZED`.
 3. Hash the session token.
-4. Find an active session and its associated user by joining `sessions.user_id` with `users.id`.
+4. Find an active session and its associated user by joining
+   `sessions.user_id` with `users.id`.
    - `token_hash` matches the hashed token
    - `revoked_at IS NULL`
    - `expires_at > now()`
 5. If no active session and user are found, return `401 UNAUTHORIZED`.
-6. Get the current date in the application time zone.
-7. Calculate:
-   - `daysRemaining`: number of days from today until the end of the current month, including today
+6. Get the current date and time using the application time zone
+   (`Asia/Bangkok`).
+7. Calculate the current period:
    - `month`: current month
    - `year`: current year
-8. Find all active accounts owned by the authenticated user.
-9. Calculate `availableCash` for each account currency from all transactions up to the current date.
-   - Add `OPENING_BALANCE`
-   - Add `INCOME`
-   - Subtract `EXPENSE`
-   - Group results by account `currency`
-10. Calculate `availableCashPerDay` for each currency.
-    - `availableCashPerDay = availableCash / daysRemaining`
-11. Find all budgets owned by the authenticated user for the current `month` and `year`.
-12. Group budgets by `currency` and calculate `totalBudget`.
-13. Find `EXPENSE` transactions for the current month and year that belong to a category with a budget.
+   - `startOfMonth`: the first day of the current month at `00:00:00`
+   - `now`: current date and time
+   - `daysRemaining`: number of calendar days from today through the last day
+     of the current month, including today
+8. Find budgets owned by the authenticated user where:
+   - `budgets.user_id` equals authenticated `user_id`
+   - `budgets.month` equals the current month
+   - `budgets.year` equals the current year
+   - Do not exclude a budget when its category is currently inactive
+9. Group budgets by `currency` and calculate `totalBudget`.
+   - Return the sum of `budgets.amount` as `totalBudget`
+10. Find expense transactions that belong to a category with a budget in the
+    current period.
     - `transactions.user_id` equals authenticated `user_id`
-    - Join `accounts` to obtain transaction currency
-    - Join `budgets` using `category_id`, `month`, and `year`
-14. Calculate `budgetSpent` for each currency.
-15. Calculate the following for each currency:
+    - `transactions.type = 'EXPENSE'`
+    - `transaction_date >= startOfMonth`
+    - `transaction_date <= now`
+    - Join `budgets` using `user_id`, `category_id`, `month`, and `year`
+    - Join `accounts` to obtain the transaction currency
+    - `accounts.currency` equals `budgets.currency`
+    - Do not include expenses from categories without a budget
+11. Group matching expense transactions by budget currency and calculate
+    `budgetSpent`.
+    - Return `0` when no matching expense transactions exist
+12. Calculate the following for each currency:
     - `budgetRemaining = totalBudget - budgetSpent`
-    - `budgetRemainingPerDay = budgetRemaining / daysRemaining`
-16. Return `200 OK`.
+    - `budgetRemainingPerDay = max(budgetRemaining, 0) / daysRemaining`
+    - `overspentAmount = max(budgetSpent - totalBudget, 0)`
+    - Round `budgetRemainingPerDay` to 2 decimal places
+13. If no budgets exist for the current period, return an empty `items` array.
+14. Return `200 OK`.
 
 ```json
 {
@@ -990,12 +1063,11 @@
     "items": [
       {
         "currency": "THB",
-        "availableCash": 200,
-        "availableCashPerDay": 20,
         "totalBudget": 500,
         "budgetSpent": 300,
         "budgetRemaining": 200,
-        "budgetRemainingPerDay": 20
+        "budgetRemainingPerDay": 20,
+        "overspentAmount": 0
       }
     ]
   }

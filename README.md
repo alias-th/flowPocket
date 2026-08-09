@@ -2,7 +2,7 @@
 
 ### Generate Migration File
 
-npm run typeorm -- migration:generate src/migrations/InitialSchema -d ./src/data-source-migration.ts
+npm run typeorm -- migration:generate src/migrations/AddUniqueConstraintBudget -d ./src/data-source-migration.ts
 
 ### Run Migration File
 

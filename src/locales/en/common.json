@@ -113,6 +113,17 @@
     "categoryTypeMismatch": "Category type must match transaction type.",
     "openingBalanceNotEditable": "Opening balance transactions cannot be edited."
   },
+  "budget": {
+    "create": {
+      "success": "Budget created successfully."
+    },
+    "get": {
+      "success": "Budgets retrieved successfully."
+    },
+    "notFound": "Budget not found.",
+    "expenseCategoryNotFound": "Active expense category not found.",
+    "alreadyExists": "A budget already exists for this category and period."
+  },
   "common": {
     "internalServerError": "Internal server error",
     "routeNotFound": "Route is not found."
