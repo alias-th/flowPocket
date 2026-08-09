@@ -15,6 +15,7 @@ import transactionRoutes from "./routes/transaction";
 import imageRoutes from "./routes/image";
 import budgetRoutes from "./routes/budget";
 import reportRoutes from "./routes/report";
+import s3Storage from "./plugins/s3.plugin";
 
 const envOptions = {
   dotenv: true,
@@ -47,6 +48,21 @@ const envOptions = {
       SESSION_TOKEN_SECRET: {
         type: "string",
         minLength: 32,
+      },
+      S3_ACCOUNT_ID: {
+        type: "string",
+      },
+      S3_ACCESS_KEY_ID: {
+        type: "string",
+      },
+      S3_SECRET_ACCESS_KEY: {
+        type: "string",
+      },
+      S3_BUCKET_NAME: {
+        type: "string",
+      },
+      S3_PUBLIC_URL: {
+        type: "string",
       },
     },
   },
@@ -94,6 +110,11 @@ async function buildApp() {
 
   fastify.register(middleware.plugin, { i18next });
   fastify.register(protectRoutePlugin);
+  fastify.register(s3Storage, {
+    ACCOUNT_ID: fastify.config.S3_ACCOUNT_ID,
+    ACCESS_KEY_ID: fastify.config.S3_ACCESS_KEY_ID!,
+    SECRET_ACCESS_KEY: fastify.config.S3_SECRET_ACCESS_KEY!,
+  });
 
   // Register routes
   const apiVersion = "/api/v1";

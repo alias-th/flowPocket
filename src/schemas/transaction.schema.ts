@@ -7,6 +7,12 @@ const uuidSchema = Joi.string().uuid({ version: ["uuidv4"] });
 const amountSchema = Joi.number().positive().precision(2);
 const transactionDateSchema = Joi.date().iso();
 
+export const supportedImageMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+] as const;
+
 export const createTransactionSchema = Joi.object({
   accountId: uuidSchema.required(),
   categoryId: uuidSchema.optional(),
@@ -80,4 +86,19 @@ export const updateTransactionSchema = Joi.object({
 
 export const transactionIdParamSchema = Joi.object({
   id: uuidSchema.required(),
+}).unknown(false);
+
+export const uploadImagesParamsSchema = transactionIdParamSchema;
+
+export const uploadImageFileSchema = Joi.object({
+  fieldname: Joi.string().valid("files").required(),
+  filename: Joi.string().trim().min(1).max(255).required(),
+  mimetype: Joi.string()
+    .valid(...supportedImageMimeTypes)
+    .required(),
+  size: Joi.number()
+    .integer()
+    .positive()
+    .max(5 * 1024 * 1024)
+    .required(),
 }).unknown(false);

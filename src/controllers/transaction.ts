@@ -3,14 +3,22 @@ import { validateAndThrowError } from "../utils/validation";
 import {
   createTransactionSchema,
   getTransactionsSchema,
+  uploadImageFileSchema,
+  uploadImagesParamsSchema,
 } from "../schemas/transaction.schema";
 import { getAppDataSource } from "../data-source";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
 import { checkNotNullUserId } from "../utils/common";
 import { Account, AccountStatus } from "../entities/account.entity";
-import { AppError } from "../utils/app-error";
+import {
+  AppError,
+  DeleteImageFileError,
+  InvalidImageFileError,
+} from "../utils/app-error";
 import { Category, CategoryType } from "../entities/category.entity";
 import { success } from "../utils/response";
+import { deleteFromS3, UploadedImage, uploadToS3 } from "../utils/s3";
+import { Image } from "../entities/image.entity";
 
 type UserTransactionType = TransactionType.INCOME | TransactionType.EXPENSE;
 
@@ -215,4 +223,145 @@ export const getTransactions = async (
       },
     }),
   );
+};
+
+interface UploadImageParams {
+  id: string;
+}
+interface ImageData {
+  filename: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+}
+export const uploadImages = async (
+  request: FastifyRequest<{ Params: UploadImageParams }>,
+  reply: FastifyReply,
+) => {
+  // 1. Validate params
+  const { id: transactionId } = validateAndThrowError<UploadImageParams>(
+    uploadImagesParamsSchema,
+    request.params,
+    request.t,
+  );
+
+  // 2. Ensure the request is multipart
+  if (!request.isMultipart()) {
+    throw new AppError(400, request.t("image.multipartRequired"));
+  }
+
+  // 3. Check userId
+  const userId = checkNotNullUserId(request);
+
+  // 4. Check transaction
+  const datasource = getAppDataSource();
+  const transaction = await datasource.manager.findOneBy(Transaction, {
+    id: transactionId,
+    userId,
+  });
+  if (!transaction) {
+    throw new AppError(404, request.t("transaction.notFound"));
+  }
+
+  // 5. Parse multipart form data, prepare data for upload
+  const files: Array<ImageData> = [];
+  for await (const part of request.files({
+    limits: {
+      files: 5,
+      fileSize: 5 * 1024 * 1024,
+    },
+  })) {
+    // validate field
+    if (part.fieldname !== "files") {
+      // ให้อ่านและทิ้งข้อมูลใน stream จนหมด
+      part.file.resume();
+      throw new AppError(400, request.t("image.invalidFieldName"));
+    }
+    const buf = await part.toBuffer();
+
+    // validate files
+    const metadata = validateAndThrowError<ImageData>(
+      uploadImageFileSchema,
+      {
+        fieldname: part.fieldname,
+        filename: part.filename,
+        mimetype: part.mimetype,
+        size: buf.length,
+      },
+      request.t,
+    );
+
+    files.push({
+      filename: metadata.filename,
+      mimetype: metadata.mimetype,
+      buffer: buf,
+      size: metadata.size,
+    });
+  }
+  if (files.length === 0) {
+    throw new AppError(400, request.t("image.fileRequired"));
+  }
+
+  // 6. Upload to s3
+  let uploadedImages: UploadedImage[] = [];
+  try {
+    uploadedImages = await uploadToS3(request.server.s3, {
+      files: files,
+      bucketName: request.server.config.S3_BUCKET_NAME,
+    });
+
+    // 7. Create image
+    const imageRecords = uploadedImages.map((image) => {
+      return {
+        transactionId: transaction.id,
+        fileKey: image.key,
+        fileName: image.filename,
+        mimeType: image.mimeType,
+        fileSize: image.size,
+      };
+    });
+    const imageEntities = datasource.manager.create(Image, imageRecords);
+    const savedImages = await datasource.manager.save(Image, imageEntities);
+
+    // 8. Response
+    return reply.code(201).send(
+      success(request.t("image.upload.success"), {
+        items: savedImages.map((image) => ({
+          id: image.id,
+          transactionId: image.transactionId,
+          fileKey: image.fileKey,
+          fileName: image.fileName,
+          mimeType: image.mimeType,
+          fileSize: image.fileSize,
+          url: `${request.server.config.S3_PUBLIC_URL}/${image.fileKey}`,
+          createdAt: image.createdAt,
+        })),
+      }),
+    );
+  } catch (error) {
+    if (error instanceof InvalidImageFileError) {
+      throw new AppError(400, request.t("image.invalidFile"));
+    }
+    if (error instanceof DeleteImageFileError) {
+      throw new AppError(500, request.t("image.deleteFailed"));
+    }
+
+    // Clean up, if cannot save images
+    if (uploadedImages.length > 0) {
+      try {
+        await deleteFromS3(
+          request.server.s3,
+          request.server.config.S3_BUCKET_NAME,
+          uploadedImages.map((image) => image.key),
+        );
+      } catch (cleanupError) {
+        request.log.error(
+          { err: cleanupError },
+          "Failed to clean up uploaded images",
+        );
+      }
+    }
+
+    throw new AppError(500, request.t("image.uploadFailed"));
+  }
 };

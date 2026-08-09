@@ -34,6 +34,17 @@
     "conflict": "Month and year cannot be used together with start date or end date.",
     "invalidRange": "Start date must not be after end date."
   },
+  "image": {
+    "multipartRequired": "The request must use multipart/form-data.",
+    "invalidFieldName": "Image files must be submitted using the files field.",
+    "fileRequired": "At least one image file is required.",
+    "invalidFile": "One or more image files are invalid.",
+    "deleteFailed": "The image file could not be deleted.",
+    "uploadFailed": "Image upload failed. Please try again.",
+    "upload": {
+      "success": "Images uploaded successfully."
+    }
+  },
   "auth": {
     "emailAlreadyInUse": "Email is already in use.",
     "unauthorized": "Your session is invalid or has expired. Please sign in again.",

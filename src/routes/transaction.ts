@@ -10,6 +10,13 @@ const transactionRoutes = async function (fastify: FastifyInstance) {
   });
 
   fastify.route({
+    method: "POST",
+    url: "/:id/images",
+    preHandler: fastify.authentication,
+    handler: transactionController.uploadImages,
+  });
+
+  fastify.route({
     method: "GET",
     url: "/",
     preHandler: fastify.authentication,

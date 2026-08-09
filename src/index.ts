@@ -5,9 +5,11 @@ import buildApp from "./app";
 import { initializeDataSource } from "./data-source";
 import closeWithGrace from "close-with-grace";
 import { FastifyReply } from "fastify";
+import { S3Client } from "@aws-sdk/client-s3";
 
 declare module "fastify" {
   interface FastifyInstance {
+    s3: S3Client;
     config: {
       POSTGRES_HOST: string;
       POSTGRES_USER: string;
@@ -15,8 +17,12 @@ declare module "fastify" {
       POSTGRES_DB: string;
       POSTGRES_PORT: string;
       SESSION_TOKEN_SECRET: string;
+      S3_ACCOUNT_ID: string;
+      S3_ACCESS_KEY_ID: string;
+      S3_SECRET_ACCESS_KEY: string;
+      S3_BUCKET_NAME: string;
+      S3_PUBLIC_URL: string;
     };
-
     authentication(request: FastifyRequest, reply: FastifyReply): void;
   }
 

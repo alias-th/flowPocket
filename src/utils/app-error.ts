@@ -10,3 +10,6 @@ export class AppError extends Error {
     super(message);
   }
 }
+
+export class InvalidImageFileError extends Error {}
+export class DeleteImageFileError extends Error {}
