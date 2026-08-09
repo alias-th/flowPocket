@@ -10,7 +10,9 @@ const transactionDateSchema = Joi.date().iso();
 export const createTransactionSchema = Joi.object({
   accountId: uuidSchema.required(),
   categoryId: uuidSchema.optional(),
-  type: Joi.string().valid(...transactionTypes).required(),
+  type: Joi.string()
+    .valid(...transactionTypes)
+    .required(),
   amount: amountSchema.required(),
   note: Joi.string().trim().optional(),
   transactionDate: transactionDateSchema.required(),
@@ -26,14 +28,39 @@ export const getTransactionsSchema = Joi.object({
   startDate: transactionDateSchema,
   endDate: transactionDateSchema,
 })
-  .and("month", "year")
   .custom((value, helpers) => {
-    if ((value.month || value.year) && (value.startDate || value.endDate)) {
-      return helpers.error("any.invalid");
+    const hasMonth = value.month !== undefined;
+    const hasYear = value.year !== undefined;
+    const hasMonthYear = hasMonth || hasYear;
+
+    const hasDateRange =
+      value.startDate !== undefined || value.endDate !== undefined;
+
+    // `month` and `year` must be provided together
+    if (hasMonth !== hasYear) {
+      return helpers.error("any.invalid", {
+        field: "dateFilter",
+        i18nKey: "dateFilter.monthYearTogether",
+      });
     }
 
-    if (value.startDate && value.endDate && value.startDate > value.endDate) {
-      return helpers.error("any.invalid");
+    // Do not allow `month`/`year` together with `startDate`/`endDate`
+    if (hasMonthYear && hasDateRange) {
+      return helpers.error("any.invalid", {
+        field: "dateFilter",
+        i18nKey: "dateFilter.conflict",
+      });
+    }
+
+    if (
+      value.startDate !== undefined &&
+      value.endDate !== undefined &&
+      value.startDate > value.endDate // `startDate` must not be after `endDate`
+    ) {
+      return helpers.error("any.invalid", {
+        field: "dateFilter",
+        i18nKey: "dateFilter.invalidRange",
+      });
     }
 
     return value;

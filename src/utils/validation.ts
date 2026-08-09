@@ -25,9 +25,14 @@ export function validateAndThrowError<T>(
   if (!error) return value;
 
   const details = error.details.map((detail) => {
-    const field = detail.path.join(".");
+    const field = String(detail.context?.field ?? detail.path.join("."));
     const label = String(detail.context?.label ?? field);
-    const key = joiMessageKey[detail.type] ?? "validation.invalid";
+    const key = String(
+      detail.context?.i18nKey ??
+        joiMessageKey[detail.type] ??
+        "validation.invalid",
+    );
+
     return {
       field,
       message: t(key, {

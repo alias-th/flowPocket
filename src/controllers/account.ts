@@ -93,6 +93,7 @@ export const getAccounts = async (
     throw new AppError(401, request.t("auth.unauthorized"));
   }
 
+  // รอ Promise หลายตัวพร้อมกัน
   const [items, total] = await Promise.all([
     datasource
       .getRepository(Account)

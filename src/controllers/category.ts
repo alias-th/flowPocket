@@ -10,7 +10,7 @@ import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { success } from "../utils/response";
-import { getUserId } from "../utils/common";
+import { checkNotNullUserId } from "../utils/common";
 
 interface CategoryParams {
   id: string;
@@ -44,7 +44,7 @@ export const createCategory = async (
     request.t,
   );
   // Checking user
-  const userId = getUserId(request);
+  const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 
   // Checking duplicate category
@@ -88,7 +88,7 @@ export const getCategories = async (
     request.query,
     request.t,
   );
-  const userId = getUserId(request);
+  const userId = checkNotNullUserId(request);
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;
   const datasource = getAppDataSource();
@@ -149,7 +149,7 @@ export const updateCategory = async (
     request.body,
     request.t,
   );
-  const userId = getUserId(request);
+  const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 
   // Check for an category
@@ -198,7 +198,7 @@ export const deleteCategory = async (
     request.params,
     request.t,
   );
-  const userId = getUserId(request);
+  const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 
   const category = await datasource.manager.findOneBy(Category, {

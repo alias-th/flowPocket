@@ -8,6 +8,13 @@ const transactionRoutes = async function (fastify: FastifyInstance) {
     preHandler: fastify.authentication,
     handler: transactionController.createTransaction,
   });
+
+  fastify.route({
+    method: "GET",
+    url: "/",
+    preHandler: fastify.authentication,
+    handler: transactionController.getTransactions,
+  });
 };
 
 export default transactionRoutes;
