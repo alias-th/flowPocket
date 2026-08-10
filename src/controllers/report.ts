@@ -329,7 +329,74 @@ export const getReportCategories = async (
 export const getReportDailyAllowance = async (
   request: FastifyRequest,
   reply: FastifyReply,
-) => {};
+) => {
+  const datasource = getAppDataSource();
+  const userId = checkNotNullUserId(request);
+  const now = new Date();
+  const { year, month, day } = getBangkokDateParts(now);
+  const { startDate: startOfMonth } = getBangkokMonthRange(year, month);
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const daysRemaining = daysInMonth - day + 1;
+  const period = {
+    month,
+    year,
+    startOfMonth,
+    now,
+    daysRemaining,
+  };
+  const transactionRepo = datasource.getRepository(Transaction);
+  const rawItems = await transactionRepo
+    .createQueryBuilder("transaction")
+    .innerJoin("transaction.account", "account")
+    .select([
+      `account.currency as "currency"`,
+      `SUM(case when transaction."type" = 'INCOME' then transaction.amount else 0 end) as "totalIncome"`,
+      `SUM(case when transaction."type" = 'EXPENSE' then transaction.amount else 0 end) as "totalExpense"`,
+      `SUM(case when transaction."type" = 'INCOME' then transaction.amount else 0 end) - SUM(case when transaction."type" = 'EXPENSE' then transaction.amount else 0 end) as "remainingAmount"`,
+      `ROUND(
+        greatest(
+            SUM(case when transaction.type = 'INCOME' then transaction.amount else 0 end) -
+            SUM(case when transaction.type = 'EXPENSE' then transaction.amount else 0 end),
+            0
+        ) / :daysRemaining,
+        2
+    ) as "dailyAllowance"`,
+    ])
+    .where("transaction.user_id = :userId", { userId })
+    .andWhere("transaction.type IN (:...transactionTypes)", {
+      transactionTypes: [TransactionType.INCOME, TransactionType.EXPENSE],
+    })
+    .andWhere("transaction.transaction_date >= :startOfMonth", { startOfMonth })
+    .andWhere("transaction.transaction_date <= :now", { now })
+    .groupBy("account.currency")
+    .setParameters({
+      daysRemaining: daysRemaining,
+    })
+    .getRawMany();
+  /** 
+<= now เหมาะกับช่วง “จนถึงเวลาปัจจุบัน”
+< endDate เหมาะกับขอบเขตสิ้นเดือน โดย endDate คือเวลา 00:00 ของเดือนถัดไป
+*/
+
+  const items = rawItems.map((item) => ({
+    currency: item.currency,
+    totalIncome: Number(item.totalIncome),
+    totalExpense: Number(item.totalExpense),
+    remainingAmount: Number(item.remainingAmount),
+    dailyAllowance: Number(item.dailyAllowance),
+  }));
+
+  return reply.code(200).send(
+    success(request.t("report.dailyAllowance.success"), {
+      period: {
+        month: period.month,
+        year: period.year,
+        daysRemaining: period.daysRemaining,
+      },
+      items,
+    }),
+  );
+};
 
 export const getReportDailyBudget = async (
   request: FastifyRequest,

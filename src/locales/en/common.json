@@ -136,6 +136,9 @@
     },
     "categories": {
       "success": "Category report retrieved successfully."
+    },
+    "dailyAllowance": {
+      "success": "Daily allowance retrieved successfully."
     }
   },
   "common": {
