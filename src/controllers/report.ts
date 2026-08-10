@@ -11,6 +11,7 @@ import { success } from "../utils/response";
 import { getBangkokDateParts, getBangkokMonthRange } from "../utils/date";
 import { Account } from "../entities/account.entity";
 import { AppError } from "../utils/app-error";
+import { Budget } from "../entities/budget.entity";
 
 interface ReportSummaryQuery {
   month?: number;
@@ -401,4 +402,83 @@ export const getReportDailyAllowance = async (
 export const getReportDailyBudget = async (
   request: FastifyRequest,
   reply: FastifyReply,
-) => {};
+) => {
+  const datasource = getAppDataSource();
+  const userId = checkNotNullUserId(request);
+  const now = new Date();
+  const { year, month, day } = getBangkokDateParts(now);
+  const { startDate: startOfMonth } = getBangkokMonthRange(year, month);
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const daysRemaining = daysInMonth - day + 1;
+  const period = {
+    month,
+    year,
+    daysRemaining,
+  };
+  const budgetRepo = datasource.getRepository(Budget);
+  const transactionRepo = datasource.getRepository(Transaction);
+  const budgetItems = await budgetRepo
+    .createQueryBuilder("b")
+    .select([`b.currency AS "currency"`, `SUM(b.amount) AS "totalBudget"`])
+    .where("b.user_id = :userId", { userId })
+    .andWhere("b.month = :month", { month })
+    .andWhere("b.year = :year", { year })
+    .groupBy("b.currency")
+    .getRawMany();
+
+  const spentItems = await transactionRepo
+    .createQueryBuilder("t")
+    .innerJoin(
+      Budget,
+      "b",
+      `
+      b.user_id = t.user_id
+      AND b.category_id = t.category_id
+      AND b.month = :month
+      AND b.year = :year
+    `,
+      { month, year },
+    )
+    .innerJoin("t.account", "a", "a.currency::text = b.currency::text")
+    .select([`b.currency AS "currency"`, `SUM(t.amount) AS "budgetSpent"`])
+    .where("t.user_id = :userId", { userId })
+    .andWhere("t.type = :expenseType", {
+      expenseType: TransactionType.EXPENSE,
+    })
+    .andWhere("t.transaction_date >= :startOfMonth", {
+      startOfMonth,
+    })
+    .andWhere("t.transaction_date <= :now", { now })
+    .groupBy("b.currency")
+    .getRawMany();
+
+  const items = budgetItems.map((budget) => {
+    const spent = spentItems.find((item) => item.currency === budget.currency);
+
+    const totalBudget = Number(budget.totalBudget);
+    const budgetSpent = Number(spent?.budgetSpent ?? 0);
+    const budgetRemaining = totalBudget - budgetSpent;
+
+    return {
+      currency: budget.currency,
+      totalBudget,
+      budgetSpent,
+      budgetRemaining,
+      budgetRemainingPerDay: Number(
+        (Math.max(budgetRemaining, 0) / daysRemaining).toFixed(2),
+      ),
+      overspentAmount: Math.max(budgetSpent - totalBudget, 0),
+    };
+  });
+
+  return reply.code(200).send(
+    success(request.t("report.dailyBudget.success"), {
+      period: {
+        month: period.month,
+        year: period.year,
+        daysRemaining: period.daysRemaining,
+      },
+      items,
+    }),
+  );
+};

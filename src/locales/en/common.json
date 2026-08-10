@@ -139,6 +139,9 @@
     },
     "dailyAllowance": {
       "success": "Daily allowance retrieved successfully."
+    },
+    "dailyBudget": {
+      "success": "Daily budget report retrieved successfully."
     }
   },
   "common": {
