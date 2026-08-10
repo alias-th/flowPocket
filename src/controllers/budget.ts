@@ -123,7 +123,7 @@ export const getBudgets = async (
       "category.transactions",
       "transaction",
       `
-      transaction.userId = :userId
+      transaction.user_id = :userId
       AND transaction.type = :transactionType
       AND transaction.transactionDate >= :startDate
       AND transaction.transactionDate < :endDate

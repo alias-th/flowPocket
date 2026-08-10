@@ -575,6 +575,11 @@ Response `200 OK`:
     },
     "summary": [
       {
+        "account": {
+          "id": "uuid",
+          "name": "SCB Main",
+          "accountStatus": "ACTIVE"
+        },
         "currency": "THB",
         "totalIncome": 35000,
         "totalExpense": 12500,

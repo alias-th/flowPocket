@@ -841,11 +841,12 @@
 8. If no account is found, return `404 ACCOUNT_NOT_FOUND`.
 9. Find transactions owned by the authenticated user within the selected period.
    - Filter by `account_id` when `accountId` is provided
-   - Join `accounts` to obtain each transaction currency
+   - Join `accounts` to obtain account details and currency
+   - Do not exclude historical transactions when their account is inactive
    - Include only `INCOME` and `EXPENSE`
    - Do not include `OPENING_BALANCE` in income or expense totals
-10. Group transaction totals by account currency.
-11. For each currency, calculate:
+10. Group transaction totals by account.
+11. For each account, calculate:
     - `totalIncome`: sum of `INCOME`
     - `totalExpense`: sum of `EXPENSE`
     - `netCashFlow`: `totalIncome - totalExpense`
@@ -861,6 +862,11 @@
     },
     "summary": [
       {
+        "account": {
+          "id": "uuid",
+          "name": "SCB Main",
+          "accountStatus": "ACTIVE"
+        },
         "currency": "THB",
         "totalIncome": 35000,
         "totalExpense": 12500,

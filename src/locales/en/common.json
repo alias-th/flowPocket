@@ -130,6 +130,11 @@
       "success": "Sessions retrieved successfully."
     }
   },
+  "report": {
+    "summary": {
+      "success": "Summary retrieved successfully."
+    }
+  },
   "common": {
     "internalServerError": "Internal server error",
     "routeNotFound": "Route is not found."
