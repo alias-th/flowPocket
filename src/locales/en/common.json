@@ -133,6 +133,9 @@
   "report": {
     "summary": {
       "success": "Summary retrieved successfully."
+    },
+    "categories": {
+      "success": "Category report retrieved successfully."
     }
   },
   "common": {
