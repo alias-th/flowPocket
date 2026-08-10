@@ -19,6 +19,7 @@ import { Category, CategoryType } from "../entities/category.entity";
 import { success } from "../utils/response";
 import { deleteFromS3, UploadedImage, uploadToS3 } from "../utils/s3";
 import { Image } from "../entities/image.entity";
+import { censorWords } from "../utils/words-filter";
 
 type UserTransactionType = TransactionType.INCOME | TransactionType.EXPENSE;
 
@@ -87,7 +88,7 @@ export const createTransaction = async (
   // Create Transaction
   const transactionInstance = datasource.manager.create(Transaction, {
     userId,
-    note: note ?? null,
+    note: censorWords(note ?? null),
     amount: String(amount),
     categoryId: category?.id ?? null,
     accountId: account.id,
