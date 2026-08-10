@@ -17,7 +17,8 @@
     "month": "Month",
     "year": "Year",
     "startDate": "Start date",
-    "endDate": "End date"
+    "endDate": "End date",
+    "includeRevoked": "Include revoked sessions"
   },
   "validation": {
     "invalidRequest": "Some information is invalid. Please check and try again.",
@@ -123,6 +124,11 @@
     "notFound": "Budget not found.",
     "expenseCategoryNotFound": "Active expense category not found.",
     "alreadyExists": "A budget already exists for this category and period."
+  },
+  "session": {
+    "get": {
+      "success": "Sessions retrieved successfully."
+    }
   },
   "common": {
     "internalServerError": "Internal server error",

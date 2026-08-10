@@ -16,6 +16,7 @@ import imageRoutes from "./routes/image";
 import budgetRoutes from "./routes/budget";
 import reportRoutes from "./routes/report";
 import s3Storage from "./plugins/s3.plugin";
+import sessionRoutes from "./routes/session";
 
 const envOptions = {
   dotenv: true,
@@ -124,6 +125,7 @@ async function buildApp() {
   fastify.register(transactionRoutes, { prefix: `${apiVersion}/transactions` });
   fastify.register(imageRoutes, { prefix: `${apiVersion}/images` });
   fastify.register(budgetRoutes, { prefix: `${apiVersion}/budgets` });
+  fastify.register(sessionRoutes, { prefix: `${apiVersion}/sessions` });
   fastify.register(reportRoutes, { prefix: `${apiVersion}/reports` });
 
   // Set global error handlers
