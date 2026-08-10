@@ -127,6 +127,7 @@ export const getTransactions = async (
   request: FastifyRequest<{ Querystring: GetTransactionQuery }>,
   reply: FastifyReply,
 ) => {
+  // Validate query parameters
   const query = validateAndThrowError<GetTransactionQuery>(
     getTransactionsSchema,
     request.query,
@@ -145,7 +146,7 @@ export const getTransactions = async (
     .getRepository(Transaction)
     .createQueryBuilder("transaction")
     .innerJoinAndSelect("transaction.account", "account")
-    .leftJoinAndSelect("transaction.category", "category") // filter null category
+    .leftJoinAndSelect("transaction.category", "category")
     .where("transaction.user_id = :userId", { userId });
 
   if (query.type) {

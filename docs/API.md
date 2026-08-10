@@ -538,6 +538,31 @@ Response `200 OK`:
 
 `GET /reports/summary`
 
+Query parameters:
+
+- `month` — optional integer from `1` to `12`; must be provided with `year`
+- `year` — optional positive integer; must be provided with `month`
+- `startDate` — optional ISO 8601 date/time with a timezone offset
+- `endDate` — optional ISO 8601 date/time with a timezone offset
+- `accountId` — optional account UUID
+
+Date filter rules:
+
+- Do not use `month`/`year` together with `startDate`/`endDate`.
+- `startDate` must be before `endDate` when both are provided.
+- `startDate` is inclusive and `endDate` is exclusive.
+- When no date filter is provided, the current month in `Asia/Bangkok` is used.
+
+Example requests:
+
+```http
+GET /reports/summary?month=8&year=2026
+```
+
+```http
+GET /reports/summary?startDate=2026-08-01T00%3A00%3A00%2B07%3A00&endDate=2026-09-01T00%3A00%3A00%2B07%3A00
+```
+
 Response `200 OK`:
 
 ```json
@@ -563,6 +588,34 @@ Response `200 OK`:
 ### Report Categories
 
 `GET /reports/categories`
+
+Query parameters:
+
+- `page` — positive integer; defaults to `1`
+- `limit` — positive integer up to `100`; defaults to `20`
+- `type` — optional `INCOME` or `EXPENSE`; defaults to `EXPENSE`
+- `accountId` — optional account UUID
+- `month` — optional integer from `1` to `12`; must be provided with `year`
+- `year` — optional positive integer; must be provided with `month`
+- `startDate` — optional ISO 8601 date/time with a timezone offset
+- `endDate` — optional ISO 8601 date/time with a timezone offset
+
+Date filter rules:
+
+- Do not use `month`/`year` together with `startDate`/`endDate`.
+- `startDate` must be before `endDate` when both are provided.
+- `startDate` is inclusive and `endDate` is exclusive.
+- When no date filter is provided, the current month in `Asia/Bangkok` is used.
+
+Example requests:
+
+```http
+GET /reports/categories?type=EXPENSE&month=8&year=2026&page=1&limit=20
+```
+
+```http
+GET /reports/categories?type=EXPENSE&startDate=2026-08-01T00%3A00%3A00%2B07%3A00&endDate=2026-09-01T00%3A00%3A00%2B07%3A00
+```
 
 Response `200 OK`:
 

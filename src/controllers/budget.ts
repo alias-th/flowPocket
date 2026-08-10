@@ -1,12 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateAndThrowError } from "../utils/validation";
-import { createBudgetSchema } from "../schemas/budget.schema";
+import { createBudgetSchema, getBudgetSchema } from "../schemas/budget.schema";
 import { checkNotNullUserId } from "../utils/common";
 import { getAppDataSource } from "../data-source";
 import { Category, CategoryType } from "../entities/category.entity";
 import { AppError, isBudgetUniqueViolation } from "../utils/app-error";
 import { Budget } from "../entities/budget.entity";
 import { success } from "../utils/response";
+import { TransactionType } from "../entities/transaction.entity";
 
 interface CreateBudgetBody {
   categoryId: string;
@@ -82,4 +83,110 @@ export const createBudget = async (
 
     throw error;
   }
+};
+
+interface GetBudgetQuery {
+  page?: number;
+  limit?: number;
+  month?: number;
+  year?: number;
+}
+
+export const getBudgets = async (
+  request: FastifyRequest<{ Querystring: GetBudgetQuery }>,
+  reply: FastifyReply,
+) => {
+  const query = validateAndThrowError<GetBudgetQuery>(
+    getBudgetSchema,
+    request.query,
+    request.t,
+  );
+
+  const userId = checkNotNullUserId(request);
+  const datasource = getAppDataSource();
+
+  const page = query.page ?? 1;
+  const limit = query.limit ?? 20;
+  const offset = (page - 1) * limit;
+  const now = new Date();
+  const month = query.month ?? now.getUTCMonth() + 1;
+  const year = query.year ?? now.getUTCFullYear();
+  const startDate = new Date(Date.UTC(year, month - 1, 1));
+  const endDate = new Date(Date.UTC(year, month, 1));
+
+  const budgetRepository = datasource.getRepository(Budget);
+
+  const budgetQuery = budgetRepository
+    .createQueryBuilder("budget")
+    .innerJoin("budget.category", "category")
+    .leftJoin(
+      "category.transactions",
+      "transaction",
+      `
+      transaction.userId = :userId
+      AND transaction.type = :transactionType
+      AND transaction.transactionDate >= :startDate
+      AND transaction.transactionDate < :endDate
+    `,
+      {
+        userId,
+        transactionType: TransactionType.EXPENSE,
+        startDate,
+        endDate,
+      },
+    )
+    .select([
+      `budget.id AS "id"`,
+      `budget.amount AS "amount"`,
+      `budget.month AS "month"`,
+      `budget.year AS "year"`,
+      `category.id AS "categoryId"`,
+      `category.name AS "categoryName"`,
+      `COALESCE(SUM(transaction.amount), 0) AS "spentAmount"`,
+      `budget.amount - COALESCE(SUM(transaction.amount), 0) AS "remainingAmount"`,
+    ])
+    .where("budget.userId = :userId", { userId })
+    .andWhere("budget.month = :month", { month })
+    .andWhere("budget.year = :year", { year })
+    .groupBy("budget.id")
+    .addGroupBy("category.id")
+    .orderBy("category.name", "ASC")
+    .offset(offset)
+    .limit(limit);
+
+  const [rawItems, total] = await Promise.all([
+    budgetQuery.getRawMany(),
+    budgetRepository.count({
+      where: {
+        userId,
+        month,
+        year,
+      },
+    }),
+  ]);
+
+  const items = rawItems.map((item) => ({
+    id: item.id,
+    category: {
+      id: item.categoryId,
+      name: item.categoryName,
+    },
+    amount: Number(item.amount),
+    spentAmount: Number(item.spentAmount),
+    remainingAmount: Number(item.remainingAmount),
+    month: item.month,
+    year: item.year,
+  }));
+
+  return reply.code(200).send(
+    success(request.t("budget.get.success"), {
+      items,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    }),
+  );
 };
