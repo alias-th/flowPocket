@@ -16,6 +16,7 @@ import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
 import { success } from "../utils/response";
+import { checkNotNullUserId } from "../utils/common";
 
 interface CreateAccountBody {
   name: string;
@@ -33,17 +34,14 @@ export const createNewAccount = async (
     request.t,
   );
   const datasource = getAppDataSource();
-  const userId = request.userId;
-  if (!userId) {
-    throw new AppError(401, request.t("auth.unauthorized"));
-  }
+  const userId = checkNotNullUserId(request);
 
   const result = await datasource.transaction(async (manager) => {
     const account = manager.create(Account, {
       userId: userId,
       name: body.name,
       type: body.type,
-      currency: AccountCurrency.THB, // ยังไม่รองรับ
+      currency: AccountCurrency.THB, // ตอนนี้ใช้ได้แค่ THB
     });
 
     const savedAccount = await manager.save(account);
@@ -88,10 +86,7 @@ export const getAccounts = async (
   );
   const { page, limit } = query;
   const offset = (page! - 1) * limit!;
-  const userId = request.userId;
-  if (!userId) {
-    throw new AppError(401, request.t("auth.unauthorized"));
-  }
+  const userId = checkNotNullUserId(request);
 
   // รอ Promise หลายตัวพร้อมกัน
   const [items, total] = await Promise.all([
@@ -175,10 +170,7 @@ export const updateAccount = async (
     request.body,
     request.t,
   );
-  const userId = request.userId;
-  if (!userId) {
-    throw new AppError(401, request.t("auth.unauthorized"));
-  }
+  const userId = checkNotNullUserId(request);
 
   // 2. Update account
   const datasource = getAppDataSource();
@@ -217,10 +209,7 @@ export const deleteAccount = async (
   );
 
   // Check user
-  const userId = request.userId;
-  if (!userId) {
-    throw new AppError(401, request.t("auth.unauthorized"));
-  }
+  const userId = checkNotNullUserId(request);
 
   // Find the active account
   const datasource = getAppDataSource();
