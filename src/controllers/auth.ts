@@ -37,6 +37,8 @@ export const register = async (
   }
 
   // 2. Hash password
+  // bcrypt สะดวกกว่าและลดความเสี่ยงจากการใช้อัลกอริทึมหรือจัดการ salt ผิด
+  // ทำงานช้า เพื่อต้านการเดารหัสผ่าน
   const hashedPassword = await bcrypt.hash(password, 12);
 
   // 3. Create new user

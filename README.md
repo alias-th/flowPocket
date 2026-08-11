@@ -226,6 +226,26 @@ docker compose down
 
     openssl rand -base64 48
 
+### Environment Variables
+
+| Variable               | Description                                                   |         Required |
+| ---------------------- | ------------------------------------------------------------- | ---------------: |
+| `PORT`                 | Port ที่เปิด API บนเครื่อง host                               |               No |
+| `POSTGRES_USER`        | PostgreSQL username                                           |              Yes |
+| `POSTGRES_PASSWORD`    | PostgreSQL password                                           |              Yes |
+| `POSTGRES_DB`          | ชื่อฐานข้อมูล                                                 |              Yes |
+| `POSTGRES_PORT`        | PostgreSQL port บนเครื่อง host                                |              Yes |
+| `SESSION_TOKEN_SECRET` | Secret สำหรับ hash session token ความยาวอย่างน้อย 32 ตัวอักษร |              Yes |
+| `S3_ACCOUNT_ID`        | Cloudflare account ID                                         | For image upload |
+| `S3_ACCESS_KEY_ID`     | Object storage access key                                     | For image upload |
+| `S3_SECRET_ACCESS_KEY` | Object storage secret key                                     | For image upload |
+| `S3_BUCKET_NAME`       | Bucket name                                                   | For image upload |
+| `S3_PUBLIC_URL`        | Public URL ของ bucket                                         | For image upload |
+
+## API Documents
+
+https://joint-operations-astronomer-80953780-s-team.docs.buildwithfern.com/flow-pocket/auth/me
+
 ## Future Improvements
 
 ### Automated Testing
