@@ -1,6 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { validateAndThrowError } from "../utils/validation";
-import { getSessionsSchema } from "../schemas/session.schema";
 import { getAppDataSource } from "../data-source";
 import { Session } from "../entities/session.entity";
 import { checkNotNullUserId } from "../utils/common";
@@ -16,11 +14,7 @@ export const getSessions = async (
   request: FastifyRequest<{ Querystring: GetSessionsQuery }>,
   reply: FastifyReply,
 ) => {
-  const query = validateAndThrowError<GetSessionsQuery>(
-    getSessionsSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
   const userId = checkNotNullUserId(request);
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;

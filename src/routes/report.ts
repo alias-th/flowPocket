@@ -1,5 +1,9 @@
 import { FastifyInstance } from "fastify";
 import * as reportController from "../controllers/report";
+import {
+  getReportCategoriesSchema,
+  getReportSummarySchema,
+} from "../schemas/report.schema";
 
 const reportRoutes = async function (fastify: FastifyInstance) {
   fastify.addHook("preHandler", fastify.authentication);
@@ -7,12 +11,18 @@ const reportRoutes = async function (fastify: FastifyInstance) {
   fastify.route({
     method: "GET",
     url: "/summary",
+    schema: {
+      querystring: getReportSummarySchema,
+    },
     handler: reportController.getReportSummary,
   });
 
   fastify.route({
     method: "GET",
     url: "/categories",
+    schema: {
+      querystring: getReportCategoriesSchema,
+    },
     handler: reportController.getReportCategories,
   });
 

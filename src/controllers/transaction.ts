@@ -41,11 +41,6 @@ export const createTransaction = async (
   reply: FastifyReply,
 ) => {
   // Validate request body
-  const body = validateAndThrowError<CreateTransactionBody>(
-    createTransactionSchema,
-    request.body,
-    request.t,
-  );
   const {
     accountId,
     amount,
@@ -53,7 +48,7 @@ export const createTransaction = async (
     type: transactionType,
     categoryId,
     note,
-  } = body;
+  } = request.body;
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 
@@ -129,11 +124,7 @@ export const getTransactions = async (
   reply: FastifyReply,
 ) => {
   // Validate query parameters
-  const query = validateAndThrowError<GetTransactionQuery>(
-    getTransactionsSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
 
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
@@ -241,11 +232,7 @@ export const uploadImages = async (
   reply: FastifyReply,
 ) => {
   // 1. Validate params
-  const { id: transactionId } = validateAndThrowError<UploadImageParams>(
-    uploadImagesParamsSchema,
-    request.params,
-    request.t,
-  );
+  const { id: transactionId } = request.params;
 
   // 2. Ensure the request is multipart
   if (!request.isMultipart()) {

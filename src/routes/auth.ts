@@ -1,9 +1,26 @@
 import { FastifyInstance } from "fastify";
 import * as authController from "../controllers/auth";
+import { loginSchema, registerSchema } from "../schemas/auth.schema";
 
 const authRoutes = async function (fastify: FastifyInstance) {
-  fastify.post("/register", authController.register);
-  fastify.post("/login", authController.login);
+  fastify.post(
+    "/register",
+    {
+      schema: {
+        body: registerSchema,
+      },
+    },
+    authController.register,
+  );
+  fastify.post(
+    "/login",
+    {
+      schema: {
+        body: loginSchema,
+      },
+    },
+    authController.login,
+  );
   fastify.route({
     method: "POST",
     url: "/logout",

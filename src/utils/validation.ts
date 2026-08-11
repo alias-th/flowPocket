@@ -12,19 +12,8 @@ const joiMessageKey: Record<string, string> = {
   "any.unknown": "validation.unknownField",
 };
 
-export function validateAndThrowError<T>(
-  schema: Joi.ObjectSchema<T>,
-  payload: unknown,
-  t: TFunction,
-): T {
-  const { error, value } = schema.validate(payload, {
-    abortEarly: false, // แจ้ง error ทั้งหมด
-    stripUnknown: false, // แจ้ง field ที่ไม่ อณุญาต
-  });
-
-  if (!error) return value;
-
-  const details = error.details.map((detail) => {
+export function formatJoiError(error: Joi.ValidationError, t: TFunction) {
+  return error.details.map((detail) => {
     const field = String(detail.context?.field ?? detail.path.join("."));
     const label = String(detail.context?.label ?? field);
     const key = String(
@@ -41,6 +30,23 @@ export function validateAndThrowError<T>(
       }),
     };
   });
+}
 
-  throw new AppError(400, t("validation.invalidRequest"), details);
+export function validateAndThrowError<T>(
+  schema: Joi.ObjectSchema<T>,
+  payload: unknown,
+  t: TFunction,
+): T {
+  const { error, value } = schema.validate(payload, {
+    abortEarly: false, // แจ้ง error ทั้งหมด
+    stripUnknown: false, // แจ้ง field ที่ไม่ อณุญาต
+  });
+
+  if (!error) return value;
+
+  throw new AppError(
+    400,
+    t("validation.invalidRequest"),
+    formatJoiError(error, t),
+  );
 }

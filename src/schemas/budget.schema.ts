@@ -32,27 +32,3 @@ export const getBudgetsSchema = Joi.object({
     return value;
   })
   .unknown(false);
-
-export const getBudgetSchema = Joi.object({
-  page: Joi.number().integer().positive().default(1),
-  limit: Joi.number().integer().positive().max(100).default(20),
-  month: Joi.number().integer().min(1).max(12),
-  year: Joi.number().integer().positive(),
-  startDate: budgetDateSchema,
-  endDate: budgetDateSchema,
-})
-  .custom((value, helpers) => {
-    const hasMonth = value.month !== undefined;
-    const hasYear = value.year !== undefined;
-
-    // `month` and `year` must be provided together
-    if (hasMonth !== hasYear) {
-      return helpers.error("any.invalid", {
-        field: "dateFilter",
-        i18nKey: "dateFilter.monthYearTogether",
-      });
-    }
-
-    return value;
-  })
-  .unknown(false);

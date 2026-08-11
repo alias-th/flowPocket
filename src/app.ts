@@ -17,6 +17,8 @@ import budgetRoutes from "./routes/budget";
 import reportRoutes from "./routes/report";
 import s3Storage from "./plugins/s3.plugin";
 import sessionRoutes from "./routes/session";
+import Joi from "joi";
+import { formatJoiError } from "./utils/validation";
 
 const envOptions = {
   dotenv: true,
@@ -113,12 +115,29 @@ async function buildApp() {
     limits: { fileSize: 5 * 1024 * 1024 },
   });
 
-  fastify.register(middleware.plugin, { i18next });
+  fastify.addHook("onRequest", middleware.handle(i18next));
   fastify.register(protectRoutePlugin);
   fastify.register(s3Storage, {
     ACCOUNT_ID: fastify.config.S3_ACCOUNT_ID,
     ACCESS_KEY_ID: fastify.config.S3_ACCESS_KEY_ID!,
     SECRET_ACCESS_KEY: fastify.config.S3_SECRET_ACCESS_KEY!,
+  });
+
+  // Set global validate
+  fastify.setValidatorCompiler(({ schema }) => {
+    return (data) => {
+      const result = (schema as Joi.Schema).validate(data, {
+        abortEarly: false, // ตรวจทุก field และคืน errors ทั้งหมดพร้อมกัน:
+        stripUnknown: false, // แจ้ง error field ที่ไม่ อณุญาต
+        convert: true, // แปลงชนิดข้อมูลให้อัตโนมัติ
+      });
+
+      if (result.error) {
+        return { error: result.error };
+      }
+
+      return { value: result.value };
+    };
   });
 
   // Register routes
@@ -136,16 +155,30 @@ async function buildApp() {
   fastify.setErrorHandler(async (error: any, request, reply) => {
     request.log.error({ err: error }, "Request failed");
 
-    const statusCode = error.statusCode ?? 500;
-    reply.code(statusCode);
+    if (error.code === "FST_ERR_VALIDATION" && Joi.isError(error)) {
+      return reply
+        .code(400)
+        .send(
+          fail(
+            request.t("validation.invalidRequest"),
+            400,
+            formatJoiError(error, request.t),
+          ),
+        );
+    }
 
-    return fail(
-      statusCode >= 500
-        ? request.t("common.internalServerError")
-        : error.message,
-      statusCode,
-      error.details,
-    );
+    const statusCode = error.statusCode ?? 500;
+    return reply
+      .code(statusCode)
+      .send(
+        fail(
+          statusCode >= 500
+            ? request.t("common.internalServerError")
+            : error.message,
+          statusCode,
+          error.details,
+        ),
+      );
   });
   fastify.setNotFoundHandler(async (_request, reply) => {
     reply.code(404);

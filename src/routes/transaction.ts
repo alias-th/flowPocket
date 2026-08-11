@@ -1,25 +1,38 @@
 import { FastifyInstance } from "fastify";
 import * as transactionController from "../controllers/transaction";
+import {
+  createTransactionSchema,
+  getTransactionsSchema,
+  uploadImagesParamsSchema,
+} from "../schemas/transaction.schema";
 
 const transactionRoutes = async function (fastify: FastifyInstance) {
+  fastify.addHook("preHandler", fastify.authentication);
+
   fastify.route({
     method: "POST",
     url: "/",
-    preHandler: fastify.authentication,
+    schema: {
+      body: createTransactionSchema,
+    },
     handler: transactionController.createTransaction,
   });
 
   fastify.route({
     method: "POST",
     url: "/:id/images",
-    preHandler: fastify.authentication,
+    schema: {
+      params: uploadImagesParamsSchema,
+    },
     handler: transactionController.uploadImages,
   });
 
   fastify.route({
     method: "GET",
     url: "/",
-    preHandler: fastify.authentication,
+    schema: {
+      querystring: getTransactionsSchema,
+    },
     handler: transactionController.getTransactions,
   });
 };

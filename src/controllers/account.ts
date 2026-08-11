@@ -5,13 +5,6 @@ import {
   AccountStatus,
   AccountType,
 } from "../entities/account.entity";
-import {
-  createAccountSchema,
-  idParamSchema,
-  getAccountsSchema,
-  updateAccountSchema,
-} from "../schemas/account.schema";
-import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
@@ -28,11 +21,7 @@ export const createNewAccount = async (
   request: FastifyRequest<{ Body: CreateAccountBody }>,
   reply: FastifyReply,
 ) => {
-  const body = validateAndThrowError<CreateAccountBody>(
-    createAccountSchema,
-    request.body,
-    request.t,
-  );
+  const body = request.body;
   const datasource = getAppDataSource();
   const userId = checkNotNullUserId(request);
 
@@ -79,11 +68,7 @@ export const getAccounts = async (
   reply: FastifyReply,
 ) => {
   const datasource = getAppDataSource();
-  const query = validateAndThrowError<GetAccountsQuery>(
-    getAccountsSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
   const { page, limit } = query;
   const offset = (page! - 1) * limit!;
   const userId = checkNotNullUserId(request);
@@ -160,16 +145,8 @@ export const updateAccount = async (
   reply: FastifyReply,
 ) => {
   // 1. Validate params and body
-  const params = validateAndThrowError<AccountParams>(
-    idParamSchema,
-    request.params,
-    request.t,
-  );
-  const body = validateAndThrowError<UpdateAccountBody>(
-    updateAccountSchema,
-    request.body,
-    request.t,
-  );
+  const params = request.params;
+  const body = request.body;
   const userId = checkNotNullUserId(request);
 
   // 2. Update account
@@ -202,11 +179,7 @@ export const deleteAccount = async (
   reply: FastifyReply,
 ) => {
   // Validate param
-  const params = validateAndThrowError<AccountParams>(
-    idParamSchema,
-    request.params,
-    request.t,
-  );
+  const params = request.params;
 
   // Check user
   const userId = checkNotNullUserId(request);

@@ -116,22 +116,38 @@ FlowPocket พัฒนาเป็น RESTful API โดยใช้ TypeScript
 ## Architecture
 
 ```text
-HTTP Request
-     │
-     ▼
-Route ──► Authentication
-     │
-     ▼
-Validation
-     │
-     ▼
-Controller
-     │
-     ▼
-TypeORM ──► PostgreSQL
-     │
-     ▼
-Standard Response
+                HTTP Request
+                     │
+                     ▼
+              ┌─────────────┐
+              │    Route    │
+              └──────┬──────┘
+                     │
+              Auth / Validation
+                     │
+                     ▼
+              ┌─────────────┐
+              │ Controller  │  ← HTTP concerns
+              └──────┬──────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │   Service   │  ← Business Logic
+              └──────┬──────┘
+                     │
+                     ▼
+          ┌─────────────────────┐
+          │ TypeORM Repository  │  ← Data Access
+          └──────────┬──────────┘
+                     │
+                     ▼
+               PostgreSQL
+                     │
+                     ▼
+                  Result
+                     │
+                     ▼
+           Standard Response
 
 ```
 
@@ -231,7 +247,7 @@ docker compose down
 | Variable               | Description                                                   |         Required |
 | ---------------------- | ------------------------------------------------------------- | ---------------: |
 | `PORT`                 | Port ที่เปิด API บนเครื่อง host                               |               No |
-| `POSTGRES_HOST`        | PostgreSQL host                                                |              Yes |
+| `POSTGRES_HOST`        | PostgreSQL host                                               |              Yes |
 | `POSTGRES_USER`        | PostgreSQL username                                           |              Yes |
 | `POSTGRES_PASSWORD`    | PostgreSQL password                                           |              Yes |
 | `POSTGRES_DB`          | ชื่อฐานข้อมูล                                                 |              Yes |

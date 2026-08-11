@@ -1,9 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { validateAndThrowError } from "../utils/validation";
-import {
-  getReportCategoriesSchema,
-  getReportSummarySchema,
-} from "../schemas/report.schema";
 import { checkNotNullUserId } from "../utils/common";
 import { getAppDataSource } from "../data-source";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
@@ -25,11 +20,7 @@ export const getReportSummary = async (
   request: FastifyRequest<{ Querystring: ReportSummaryQuery }>,
   reply: FastifyReply,
 ) => {
-  const query = validateAndThrowError<ReportSummaryQuery>(
-    getReportSummarySchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
   const transactionRepo = datasource.getRepository(Transaction);
@@ -174,11 +165,7 @@ export const getReportCategories = async (
   request: FastifyRequest<{ Querystring: ReportCategories }>,
   reply: FastifyReply,
 ) => {
-  const query = validateAndThrowError<ReportCategories>(
-    getReportCategoriesSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
   const userId = checkNotNullUserId(request);
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;

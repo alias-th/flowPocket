@@ -1,6 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { validateAndThrowError } from "../utils/validation";
-import { createBudgetSchema, getBudgetSchema } from "../schemas/budget.schema";
 import { checkNotNullUserId } from "../utils/common";
 import { getAppDataSource } from "../data-source";
 import { Category, CategoryType } from "../entities/category.entity";
@@ -20,11 +18,7 @@ export const createBudget = async (
   reply: FastifyReply,
 ) => {
   // Validate request body
-  const body = validateAndThrowError<CreateBudgetBody>(
-    createBudgetSchema,
-    request.body,
-    request.t,
-  );
+  const body = request.body;
   const { amount, categoryId, month, year } = body;
   const userId = checkNotNullUserId(request);
 
@@ -96,11 +90,7 @@ export const getBudgets = async (
   request: FastifyRequest<{ Querystring: GetBudgetQuery }>,
   reply: FastifyReply,
 ) => {
-  const query = validateAndThrowError<GetBudgetQuery>(
-    getBudgetSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
 
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();

@@ -1,12 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Category, CategoryType } from "../entities/category.entity";
-import {
-  categoryIdParamSchema,
-  createCategorySchema,
-  getCategoriesSchema,
-  updateCategorySchema,
-} from "../schemas/category.schema";
-import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { success } from "../utils/response";
@@ -38,11 +31,7 @@ export const createCategory = async (
   reply: FastifyReply,
 ) => {
   // Validate body
-  const body = validateAndThrowError<CreateCategoryBody>(
-    createCategorySchema,
-    request.body,
-    request.t,
-  );
+  const body = request.body;
   // Checking user
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
@@ -83,11 +72,7 @@ export const getCategories = async (
   request: FastifyRequest<{ Querystring: GetCategoriesQuery }>,
   reply: FastifyReply,
 ) => {
-  const query = validateAndThrowError<GetCategoriesQuery>(
-    getCategoriesSchema,
-    request.query,
-    request.t,
-  );
+  const query = request.query;
   const userId = checkNotNullUserId(request);
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;
@@ -139,16 +124,8 @@ export const updateCategory = async (
   }>,
   reply: FastifyReply,
 ) => {
-  const params = validateAndThrowError<CategoryParams>(
-    categoryIdParamSchema,
-    request.params,
-    request.t,
-  );
-  const body = validateAndThrowError<UpdateCategoryBody>(
-    updateCategorySchema,
-    request.body,
-    request.t,
-  );
+  const params = request.params;
+  const body = request.body;
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 
@@ -193,11 +170,7 @@ export const deleteCategory = async (
   request: FastifyRequest<{ Params: CategoryParams }>,
   reply: FastifyReply,
 ) => {
-  const params = validateAndThrowError<CategoryParams>(
-    categoryIdParamSchema,
-    request.params,
-    request.t,
-  );
+  const params = request.params;
   const userId = checkNotNullUserId(request);
   const datasource = getAppDataSource();
 

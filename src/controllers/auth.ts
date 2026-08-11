@@ -1,7 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { success } from "../utils/response";
-import { loginSchema, registerSchema } from "../schemas/auth.schema";
-import { validateAndThrowError } from "../utils/validation";
 import { getAppDataSource } from "../data-source";
 import { PreferredLanguage, User } from "../entities/user.entity";
 import { AppError } from "../utils/app-error";
@@ -20,12 +18,7 @@ export const register = async (
   request: FastifyRequest<{ Body: RegisterBody }>,
   reply: FastifyReply,
 ) => {
-  const body = validateAndThrowError<RegisterBody>(
-    registerSchema,
-    request.body,
-    request.t,
-  );
-  const { email, name, password, preferredLanguage } = body;
+  const { email, name, password, preferredLanguage } = request.body;
   const datasource = getAppDataSource();
 
   // 1. Normalize email
@@ -70,12 +63,7 @@ export const login = async (
   request: FastifyRequest<{ Body: LoginBody }>,
   reply: FastifyReply,
 ) => {
-  const body = validateAndThrowError<LoginBody>(
-    loginSchema,
-    request.body,
-    request.t,
-  );
-  const { email, password } = body;
+  const { email, password } = request.body;
   const datasource = getAppDataSource();
   const { device, ua } = UAParser(request.headers["user-agent"]);
   const userIp = request.ip;
