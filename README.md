@@ -57,9 +57,7 @@ FlowPocket คือ REST API สำหรับจัดการรายร�
 
 ## แนวคิดในการออกแบบ
 
-> FlowPocket แบ่งโครงสร้างโปรเจกต์ออกเป็น Route, Schema, Controller,
-> Entity, Plugin และ Utility เพื่อให้แต่ละส่วนมีหน้าที่ชัดเจน
-> และง่ายต่อการดูแลหรือต่อยอด
+FlowPocket แบ่งโครงสร้างโปรเจกต์ออกเป็น Route, Schema, Controller, Entity, Plugin และ Utility เพื่อให้แต่ละส่วนมีหน้าที่ชัดเจน และง่ายต่อการดูแลหรือต่อยอด.
 
 ### Separation of Concerns
 
@@ -72,37 +70,35 @@ FlowPocket คือ REST API สำหรับจัดการรายร�
 - **Plugin** จัดการความสามารถที่ใช้ร่วมกัน เช่น authentication และ Cloudflare R2 (S3-compatible API)
 - **Utility** รวม logic ที่นำกลับมาใช้ซ้ำ เช่น response, date และ validation
 
-การแบ่งหน้าที่ช่วยลดความซ้ำซ้อนและทำให้ค้นหาจุดที่ต้องแก้ไขได้ง่ายขึ้น
-
 ### Authentication และ Data Ownership
 
-> ระบบใช้ session token สำหรับยืนยันตัวตน โดยจัดเก็บ token ในรูปแบบ hash แทนการเก็บ token ต้นฉบับในฐานข้อมูล หลังผ่าน authentication ระบบจะนำ `userId` จาก session มาใช้ตรวจสอบ ownership ของ Account, Category, Transaction และ Budget ทุกครั้ง แทนการเชื่อถือ `userId` ที่ส่งมาจาก client วิธีนี้ช่วยป้องกันผู้ใช้ เข้าถึงหรือแก้ไขข้อมูลของผู้ใช้อื่น
+ระบบใช้ session token สำหรับยืนยันตัวตน โดยจัดเก็บ token ในรูปแบบ hash แทนการเก็บ token ต้นฉบับในฐานข้อมูล หลังผ่าน authentication ระบบจะนำ `userId` จาก session มาใช้ตรวจสอบ ownership ของ Account, Category, Transaction และ Budget ทุกครั้ง แทนการเชื่อถือ `userId` ที่ส่งมาจาก client วิธีนี้ช่วยป้องกันผู้ใช้ เข้าถึงหรือแก้ไขข้อมูลของผู้ใช้อื่น
 
 ### Input Validation
 
-> Request parameters, query string และ request body ถูกตรวจสอบด้วย Joi ก่อนเข้าสู่ business logic เพื่อให้ API ปฏิเสธข้อมูลที่ผิดรูปแบบตั้งแต่ต้น และส่งข้อความ error ที่มีรูปแบบเหมือนกัน
+Request parameters, query string และ request body ถูกตรวจสอบด้วย Joi ก่อนเข้าสู่ business logic เพื่อให้ API ปฏิเสธข้อมูลที่ผิดรูปแบบตั้งแต่ต้น และส่งข้อความ error ที่มีรูปแบบเหมือนกัน
 
 ### Data Integrity
 
-> ระบบกำหนด `synchronize: false` และใช้ TypeORM migration ในการจัดการ การเปลี่ยนแปลง schema แทนการให้ ORM แก้ไขฐานข้อมูลโดยอัตโนมัติ แนวทางนี้ช่วยลดความเสี่ยงจากการเปลี่ยนหรือลบ column, constraint และข้อมูลโดยไม่ตั้งใจ
+ระบบกำหนด `synchronize: false` และใช้ TypeORM migration ในการจัดการ การเปลี่ยนแปลง schema แทนการให้ ORM แก้ไขฐานข้อมูลโดยอัตโนมัติ แนวทางนี้ช่วยลดความเสี่ยงจากการเปลี่ยนหรือลบ column, constraint และข้อมูลโดยไม่ตั้งใจ
 
-> ระบบใช้ database constraints ร่วมกับ application validation เพื่อรักษาความถูกต้องของข้อมูลและป้องกันข้อมูลที่ไม่ควรซ้ำ
+ระบบใช้ database constraints ร่วมกับ application validation เพื่อรักษาความถูกต้องของข้อมูลและป้องกันข้อมูลที่ไม่ควรซ้ำ
 
 ### Soft Delete
 
-> Account และ Category ใช้วิธีเปลี่ยนสถานะแทนการลบ record ออกจาก ฐานข้อมูล เพื่อรักษาประวัติและความสัมพันธ์กับ Transaction เดิม
+Account และ Category ใช้วิธีเปลี่ยนสถานะแทนการลบ record ออกจาก ฐานข้อมูล เพื่อรักษาประวัติและความสัมพันธ์กับ Transaction เดิม
 
 ### Standard API Response
 
-> API ใช้โครงสร้าง response กลางสำหรับผลลัพธ์สำเร็จและข้อผิดพลาด เพื่อให้ client ประมวลผลข้อมูลได้อย่างสม่ำเสมอ และไม่ต้องรองรับ response shape ที่แตกต่างกันในแต่ละ endpoint
+API ใช้โครงสร้าง response กลางสำหรับผลลัพธ์สำเร็จและข้อผิดพลาด เพื่อให้ client ประมวลผลข้อมูลได้อย่างสม่ำเสมอ และไม่ต้องรองรับ response shape ที่แตกต่างกันในแต่ละ endpoint
 
 ### Internationalization
 
-> ข้อความสำเร็จ ข้อความ validation และ error message อ้างอิงผ่าน translation key โดยใช้ i18next แทนการเขียนข้อความไว้ใน business logic โดยตรง ปัจจุบันระบบรองรับภาษาไทยและภาษาอังกฤษ และสามารถเพิ่มภาษาใหม่ ผ่าน translation resource โดยไม่ต้องเปลี่ยนขั้นตอนการทำงานหลัก
+ข้อความสำเร็จ ข้อความ validation และ error message อ้างอิงผ่าน translation key โดยใช้ i18next แทนการเขียนข้อความไว้ใน business logic โดยตรง ปัจจุบันระบบรองรับภาษาไทยและภาษาอังกฤษ และสามารถเพิ่มภาษาใหม่ ผ่าน translation resource โดยไม่ต้องเปลี่ยนขั้นตอนการทำงานหลัก
 
 ## Technology
 
-> FlowPocket พัฒนาเป็น RESTful API โดยใช้ TypeScript และ Fastify เชื่อมต่อฐานข้อมูล PostgreSQL ผ่าน TypeORM โครงสร้างโปรเจกต์แบ่งตาม หน้าที่ของแต่ละส่วน เพื่อให้ค้นหา แก้ไข และต่อยอดระบบได้ง่ายขึ้น
+FlowPocket พัฒนาเป็น RESTful API โดยใช้ TypeScript และ Fastify เชื่อมต่อฐานข้อมูล PostgreSQL ผ่าน TypeORM โครงสร้างโปรเจกต์แบ่งตาม หน้าที่ของแต่ละส่วน เพื่อให้ค้นหา แก้ไข และต่อยอดระบบได้ง่ายขึ้น
 
 | Technology                        | การใช้งาน                                                                   |
 | --------------------------------- | --------------------------------------------------------------------------- |
@@ -234,20 +230,20 @@ docker compose down
 
 ### Automated Testing
 
-> เพิ่ม integration tests สำหรับ authentication, data ownership, transaction, budget และ report calculation พร้อมแยก test database ออกจาก development environment
+เพิ่ม integration tests สำหรับ authentication, data ownership, transaction, budget และ report calculation พร้อมแยก test database ออกจาก development environment
 
 ### Service Layer
 
-> แยก business logic และ database query ออกจาก controller ไปยัง service layer เพื่อลดความซ้ำซ้อนและทำให้ทดสอบได้ง่ายขึ้น
+แยก business logic และ database query ออกจาก controller ไปยัง service layer เพื่อลดความซ้ำซ้อนและทำให้ทดสอบได้ง่ายขึ้น
 
 ### Report Export
 
-> เพิ่มการ export รายงานเป็น CSV, JSON และ Excel รวมถึงรองรับ Google Sheets ในอนาคต
+เพิ่มการ export รายงานเป็น CSV, JSON และ Excel รวมถึงรองรับ Google Sheets ในอนาคต
 
 ### Security และ Observability
 
-> เพิ่ม rate limiting, login attempt protection และ error monitoring สำหรับการใช้งานใน production
+เพิ่ม rate limiting, login attempt protection และ error monitoring สำหรับการใช้งานใน production
 
 ### CI/CD และ Deployment
 
-> เพิ่ม pipeline สำหรับ type checking, linting, automated testing, production build และ Docker image build รวมถึงแยก database migration เป็น deployment job เมื่อระบบรองรับหลาย application replicas
+เพิ่ม pipeline สำหรับ type checking, linting, automated testing, production build และ Docker image build รวมถึงแยก database migration เป็น deployment job เมื่อระบบรองรับหลาย application replicas
