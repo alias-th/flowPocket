@@ -11,6 +11,7 @@ declare module "fastify" {
   interface FastifyInstance {
     s3: S3Client;
     config: {
+      PORT: string;
       POSTGRES_HOST: string;
       POSTGRES_USER: string;
       POSTGRES_PASSWORD: string;
@@ -42,7 +43,7 @@ const start = async () => {
     console.log("Data Source has been initialized!");
 
     await app.listen({
-      port: Number(process.env.PORT ?? 8080),
+      port: Number(app.config.PORT),
       host: "0.0.0.0",
     });
   } catch (error) {

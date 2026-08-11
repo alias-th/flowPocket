@@ -31,6 +31,10 @@ const envOptions = {
       "SESSION_TOKEN_SECRET",
     ],
     properties: {
+      PORT: {
+        type: "string",
+        default: "8080",
+      },
       POSTGRES_HOST: {
         type: "string",
       },
@@ -136,14 +140,16 @@ async function buildApp() {
     reply.code(statusCode);
 
     return fail(
-      statusCode >= 500 ? "Internal server error" : error.message,
+      statusCode >= 500
+        ? request.t("common.internalServerError")
+        : error.message,
       statusCode,
       error.details,
     );
   });
   fastify.setNotFoundHandler(async (_request, reply) => {
     reply.code(404);
-    return fail("Route is not found.", 404);
+    return fail(_request.t("common.routeNotFound"), 404);
   });
 
   return fastify;

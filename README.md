@@ -231,6 +231,7 @@ docker compose down
 | Variable               | Description                                                   |         Required |
 | ---------------------- | ------------------------------------------------------------- | ---------------: |
 | `PORT`                 | Port ที่เปิด API บนเครื่อง host                               |               No |
+| `POSTGRES_HOST`        | PostgreSQL host                                                |              Yes |
 | `POSTGRES_USER`        | PostgreSQL username                                           |              Yes |
 | `POSTGRES_PASSWORD`    | PostgreSQL password                                           |              Yes |
 | `POSTGRES_DB`          | ชื่อฐานข้อมูล                                                 |              Yes |
