@@ -1,12 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateAndThrowError } from "../utils/validation";
-import {
-  createTransactionSchema,
-  getTransactionsSchema,
-  uploadImageFileSchema,
-  uploadImagesParamsSchema,
-} from "../schemas/transaction.schema";
-import { getAppDataSource } from "../data-source";
+import { uploadImageFileSchema } from "../schemas/transaction.schema";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
 import { checkNotNullUserId } from "../utils/common";
 import { Account, AccountStatus } from "../entities/account.entity";
@@ -50,7 +44,7 @@ export const createTransaction = async (
     note,
   } = request.body;
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   // Find an active account
   const account = await datasource.manager.findOneBy(Account, {
@@ -127,7 +121,7 @@ export const getTransactions = async (
   const query = request.query;
 
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;
@@ -243,7 +237,7 @@ export const uploadImages = async (
   const userId = checkNotNullUserId(request);
 
   // 4. Check transaction
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const transaction = await datasource.manager.findOneBy(Transaction, {
     id: transactionId,
     userId,

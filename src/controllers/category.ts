@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Category, CategoryType } from "../entities/category.entity";
-import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { success } from "../utils/response";
 import { checkNotNullUserId } from "../utils/common";
@@ -34,7 +33,7 @@ export const createCategory = async (
   const body = request.body;
   // Checking user
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   // Checking duplicate category
   const existingCategory = await datasource
@@ -76,7 +75,7 @@ export const getCategories = async (
   const userId = checkNotNullUserId(request);
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   const categoryQuery = datasource
     .getRepository(Category)
@@ -127,7 +126,7 @@ export const updateCategory = async (
   const params = request.params;
   const body = request.body;
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   // Check for an category
   const category = await datasource.manager.findOneBy(Category, {
@@ -172,7 +171,7 @@ export const deleteCategory = async (
 ) => {
   const params = request.params;
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   const category = await datasource.manager.findOneBy(Category, {
     id: params.id,

@@ -5,7 +5,6 @@ import {
   AccountStatus,
   AccountType,
 } from "../entities/account.entity";
-import { getAppDataSource } from "../data-source";
 import { AppError } from "../utils/app-error";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
 import { success } from "../utils/response";
@@ -22,7 +21,7 @@ export const createNewAccount = async (
   reply: FastifyReply,
 ) => {
   const body = request.body;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const userId = checkNotNullUserId(request);
 
   const result = await datasource.transaction(async (manager) => {
@@ -67,7 +66,7 @@ export const getAccounts = async (
   request: FastifyRequest<{ Querystring: GetAccountsQuery }>,
   reply: FastifyReply,
 ) => {
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const query = request.query;
   const { page, limit } = query;
   const offset = (page! - 1) * limit!;
@@ -150,7 +149,7 @@ export const updateAccount = async (
   const userId = checkNotNullUserId(request);
 
   // 2. Update account
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const account = await datasource.manager.findOneBy(Account, {
     id: params.id,
     userId,
@@ -185,7 +184,7 @@ export const deleteAccount = async (
   const userId = checkNotNullUserId(request);
 
   // Find the active account
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const account = await datasource.manager.findOneBy(Account, {
     id: params.id,
     userId,

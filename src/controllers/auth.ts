@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { success } from "../utils/response";
-import { getAppDataSource } from "../data-source";
 import { PreferredLanguage, User } from "../entities/user.entity";
 import { AppError } from "../utils/app-error";
 import bcrypt from "bcrypt";
@@ -19,7 +18,7 @@ export const register = async (
   reply: FastifyReply,
 ) => {
   const { email, name, password, preferredLanguage } = request.body;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   // 1. Normalize email
   const existingAccount = await datasource.manager.findOneBy(User, {
@@ -64,7 +63,7 @@ export const login = async (
   reply: FastifyReply,
 ) => {
   const { email, password } = request.body;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const { device, ua } = UAParser(request.headers["user-agent"]);
   const userIp = request.ip;
 
@@ -125,7 +124,7 @@ export const login = async (
 };
 
 export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const sessionId = request.sessionId;
   const userId = request.userId;
   await datasource.manager.update(
@@ -140,7 +139,7 @@ export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
 };
 
 export const me = async (request: FastifyRequest, reply: FastifyReply) => {
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const userId = request.userId;
   const user = await datasource.manager.findOne(User, {
     where: {

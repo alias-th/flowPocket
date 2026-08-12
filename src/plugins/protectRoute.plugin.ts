@@ -2,7 +2,6 @@ import { FastifyPluginCallback, FastifyRequest, FastifyReply } from "fastify";
 import fp from "fastify-plugin";
 import { hashToken } from "../utils/token";
 import { Session } from "../entities/session.entity";
-import { getAppDataSource } from "../data-source";
 import { IsNull, MoreThan } from "typeorm";
 import { AppError } from "../utils/app-error";
 
@@ -27,7 +26,7 @@ const protectRoutePlugin: FastifyPluginCallback = fp(
         // Validate token
         const secretMessage = request.server.config.SESSION_TOKEN_SECRET;
         const hashedToken = hashToken(rawToken, secretMessage);
-        const datasource = getAppDataSource();
+        const datasource = request.server.db;
         const session = await datasource.manager.findOneBy(Session, {
           tokenHash: hashedToken,
           revokedAt: IsNull(),

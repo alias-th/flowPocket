@@ -147,6 +147,9 @@ FlowPocket พัฒนาเป็น RESTful API โดยใช้ TypeScript
                   Result
                      │
                      ▼
+              Controller
+                     │
+                     ▼
            Standard Response
 
 ```
@@ -232,11 +235,11 @@ docker compose down
 
 ### Generate Migration File
 
-    npm run typeorm -- migration:generate src/migrations/AddUniqueConstraintBudget -d ./src/data-source-migration.ts
+    npm run typeorm -- migration:generate src/migrations/AddUniqueConstraintBudget -d ./src/datasource.ts
 
 ### Run Migration File
 
-    npm run typeorm -- migration:run -d ./src/data-source-migration.ts
+    npm run typeorm -- migration:run -d ./src/datasource.ts
 
 ### Generate token secret
 

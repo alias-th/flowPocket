@@ -19,6 +19,7 @@ import s3Storage from "./plugins/s3.plugin";
 import sessionRoutes from "./routes/session";
 import Joi from "joi";
 import { formatJoiError } from "./utils/validation";
+import databasePlugin from "./plugins/database.plugin";
 
 const envOptions = {
   dotenv: true,
@@ -110,6 +111,7 @@ async function buildApp() {
   const fastify = Fastify({ bodyLimit: 50 * 1024 * 1024, logger: logger });
   await fastify.register(cors);
   await fastify.register(fastifyEnv, envOptions);
+  await fastify.register(databasePlugin);
 
   fastify.register(multipart, {
     limits: { fileSize: 5 * 1024 * 1024 },

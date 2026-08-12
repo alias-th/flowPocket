@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { checkNotNullUserId } from "../utils/common";
-import { getAppDataSource } from "../data-source";
 import { Category, CategoryType } from "../entities/category.entity";
 import { AppError, isBudgetUniqueViolation } from "../utils/app-error";
 import { Budget } from "../entities/budget.entity";
@@ -23,7 +22,7 @@ export const createBudget = async (
   const userId = checkNotNullUserId(request);
 
   // Get datasource
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   // Find an active expense category
   const expenseCategory = await datasource.getRepository(Category).findOneBy({
@@ -93,7 +92,7 @@ export const getBudgets = async (
   const query = request.query;
 
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
 
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;

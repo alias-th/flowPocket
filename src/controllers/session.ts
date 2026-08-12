@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getAppDataSource } from "../data-source";
 import { Session } from "../entities/session.entity";
 import { checkNotNullUserId } from "../utils/common";
 import { success } from "../utils/response";
@@ -20,7 +19,7 @@ export const getSessions = async (
   const limit = query.limit ?? 20;
   const includeRevoked = query.includeRevoked ?? false;
   const offset = (page - 1) * limit;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const sessionRepo = datasource.getRepository(Session);
   const sessionQuery = sessionRepo
     .createQueryBuilder("session")

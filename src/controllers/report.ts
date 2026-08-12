@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { checkNotNullUserId } from "../utils/common";
-import { getAppDataSource } from "../data-source";
 import { Transaction, TransactionType } from "../entities/transaction.entity";
 import { success } from "../utils/response";
 import { getBangkokDateParts, getBangkokMonthRange } from "../utils/date";
@@ -22,7 +21,7 @@ export const getReportSummary = async (
 ) => {
   const query = request.query;
   const userId = checkNotNullUserId(request);
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const transactionRepo = datasource.getRepository(Transaction);
   const transactionQuery = transactionRepo
     .createQueryBuilder("transaction")
@@ -170,7 +169,7 @@ export const getReportCategories = async (
   const page = query.page ?? 1;
   const limit = query.limit ?? 20;
   const offset = (page - 1) * limit;
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const transactionRepo = datasource.getRepository(Transaction);
   const transactionQuery = transactionRepo
     .createQueryBuilder("transaction")
@@ -318,7 +317,7 @@ export const getReportDailyAllowance = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const userId = checkNotNullUserId(request);
   const now = new Date();
   const { year, month, day } = getBangkokDateParts(now);
@@ -390,7 +389,7 @@ export const getReportDailyBudget = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-  const datasource = getAppDataSource();
+  const datasource = request.server.db;
   const userId = checkNotNullUserId(request);
   const now = new Date();
   const { year, month, day } = getBangkokDateParts(now);
