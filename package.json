@@ -5,6 +5,11 @@
   "main": "index.js",
   "scripts": {
     "typeorm": "tsx ./node_modules/typeorm/cli.js",
+    "migration:create": "npm run typeorm -- migration:create",
+    "migration:generate": "npm run typeorm -- migration:generate -d ./src/datasource.ts",
+    "migration:run": "npm run typeorm -- migration:run -d ./src/datasource.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d ./src/datasource.ts",
+    "migration:show": "npm run typeorm -- migration:show -d ./src/datasource.ts",
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js"

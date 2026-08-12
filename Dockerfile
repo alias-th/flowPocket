@@ -39,4 +39,4 @@ EXPOSE 8080
 
 # เรียก TypeORM CLI เพื่อรัน migration ที่ยังไม่เคยใช้งาน โดยใช้ DataSource ที่ compile แล้วใน dist
 # เริ่ม production application จาก JavaScript ที่ compile แล้ว
-CMD ["sh", "-c", "node ./node_modules/typeorm/cli.js migration:run -d ./dist/data-source-migration.js && exec node dist/index.js"]
+CMD ["sh", "-c", "node ./node_modules/typeorm/cli.js migration:run -d ./dist/datasource.js && exec node dist/index.js"]

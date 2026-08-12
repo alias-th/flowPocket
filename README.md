@@ -30,7 +30,7 @@ FlowPocket คือ REST API สำหรับจัดการรายร�
 ### Transaction (ระบบบันทึกรายรับรายจ่าย)
 
 - บันทึกรายรับและรายจ่าย
-- กรองรายการตามบัญชี หมวดหมู่ ประเภท และวันที่
+- กรองรายการตามบัญชี ประเภท และวันที่
 - รองรับ pagination
 - แนบรูปภาพกับธุรกรรม
 - กรองคำที่ไม่เหมาะสมจากหมายเหตุ
@@ -127,12 +127,7 @@ FlowPocket พัฒนาเป็น RESTful API โดยใช้ TypeScript
                      │
                      ▼
               ┌─────────────┐
-              │ Controller  │  ← HTTP concerns
-              └──────┬──────┘
-                     │
-                     ▼
-              ┌─────────────┐
-              │   Service   │  ← Business Logic
+              │ Controller  │  ← Business Logic
               └──────┬──────┘
                      │
                      ▼
@@ -169,7 +164,7 @@ src/
 ├── data/          # Static application data
 ├── app.ts         # สร้างและตั้งค่า Fastify application
 ├── index.ts       # Application entry point
-└── data-source.ts # TypeORM DataSource configuration
+└── datasource.ts # TypeORM DataSource configuration
 ```
 
 ## Database Design
@@ -235,7 +230,7 @@ docker compose down
 
 ### Generate Migration File
 
-    npm run typeorm -- migration:generate src/migrations/AddUniqueConstraintBudget -d ./src/datasource.ts
+    npm run typeorm -- migration:generate src/migrations/SeedData -d ./src/datasource.ts
 
 ### Run Migration File
 
@@ -264,7 +259,9 @@ docker compose down
 
 ## API Documents
 
-https://joint-operations-astronomer-80953780-s-team.docs.buildwithfern.com/flow-pocket/auth/me
+- [Online API Documentation](https://joint-operations-astronomer-80953780-s-team.docs.buildwithfern.com/flow-pocket/auth/me)
+- [API Documentation](docs/API.md)
+- [Business Flow](docs/BUSSINESS_FLOW.md)
 
 ## Future Improvements
 
