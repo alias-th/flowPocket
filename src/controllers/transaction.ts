@@ -184,6 +184,42 @@ export const getTransactions = async (
     .take(limit)
     .getManyAndCount();
 
+  // get images
+  const transactionIds = transactions.map((i) => {
+    return i.id;
+  });
+  let images: Image[] = [];
+  if (transactionIds.length) {
+    images = await datasource
+      .getRepository(Image)
+      .createQueryBuilder("image")
+      .where("image.transaction_id IN (:...transactionIds)", { transactionIds })
+      .orderBy("image.created_at", "ASC")
+      .getMany();
+  }
+  const imagesByTransactionId = images.reduce<Record<string, Image[]>>(
+    (result, image) => {
+      const transactionId = image.transactionId;
+
+      // หาของเก่า / สร้างของใหม่
+      const transactionImages = result[transactionId] ?? [];
+
+      // push image ใหม่
+      transactionImages.push(image);
+
+      // นำ array กลับไปใส่ใน object
+      result[transactionId] = transactionImages.map((i) => {
+        return {
+          ...i,
+          url: `${request.server.config.S3_PUBLIC_URL}/${i.fileKey}`,
+        };
+      });
+
+      return result;
+    },
+    {},
+  );
+
   return reply.code(200).send(
     success(request.t("transaction.get.success"), {
       items: transactions.map((transaction) => ({
@@ -202,6 +238,7 @@ export const getTransactions = async (
         amount: transaction.amount,
         note: transaction.note,
         transactionDate: transaction.transactionDate,
+        images: imagesByTransactionId[transaction.id] ?? [],
       })),
       pagination: {
         page,

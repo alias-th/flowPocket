@@ -18,7 +18,8 @@
     "year": "Year",
     "startDate": "Start date",
     "endDate": "End date",
-    "includeRevoked": "Include revoked sessions"
+    "includeRevoked": "Include revoked sessions",
+    "format": "File format"
   },
   "validation": {
     "invalidRequest": "Some information is invalid. Please check and try again.",
@@ -143,6 +144,11 @@
     },
     "dailyBudget": {
       "success": "Daily budget report retrieved successfully."
+    }
+  },
+  "export": {
+    "get": {
+      "success": "Data exported successfully."
     }
   },
   "common": {
