@@ -264,6 +264,11 @@ docker compose down
 - [API Docs Postman](docs/flow-pocket.postman_collection.json)
 - [Business Flow](docs/BUSSINESS_FLOW.md)
 
+## Demo User
+
+    User: demo@flowpocket.com
+    Password: Password123!
+
 ## Future Improvements
 
 ### Automated Testing
