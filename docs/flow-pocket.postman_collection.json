@@ -1,0 +1,3780 @@
+{
+  "info": {
+    "_postman_id": "11e8ff31-afd1-4eca-8747-2423e526a48f",
+    "name": "flow-pocket",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32892772"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test4@gmail.com\",\n    \"password\": \"12345678\",\n    \"name\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "### Register\n\nสร้างบัญชีผู้ใช้ใหม่ โดยไม่ต้องยืนยันตัวตน\n\n`POST /api/v1/auth/register`\n\n#### Headers\n\n| Header | Required | Description |\n| --- | --- | --- |\n| `Content-Type: application/json` | Yes | รูปแบบข้อมูลที่ส่ง |\n| `Accept-Language: th` หรือ `en` | No | ภาษาของข้อความตอบกลับ |\n\n#### Request body\n\n| Field | Type | Required | Validation |\n| --- | --- | --- | --- |\n| `email` | string | Yes | ต้องเป็นอีเมลที่ถูกต้อง ระบบจะ trim และแปลงเป็นตัวพิมพ์เล็ก |\n| `name` | string | Yes | ความยาว 2–100 ตัวอักษร |\n| `password` | string | Yes | อย่างน้อย 8 ตัวอักษร |\n| `preferredLanguage` | string | No | รับเฉพาะ `TH` หรือ `EN`; ค่าเริ่มต้นคือ `TH` |\n\nไม่อนุญาตให้ส่ง field อื่นนอกเหนือจากที่ระบุ\n\n#### Example request\n\n``` json\n{\n  \"email\": \"john@example.com\",\n  \"name\": \"John Doe\",\n  \"password\": \"12345678\",\n  \"preferredLanguage\": \"TH\"\n}\n\n ```"
+          },
+          "response": [
+            {
+              "name": "register-201",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"12345678\",\n    \"name\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "207"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:19:03 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"สร้างบัญชีสำเร็จแล้ว\",\n    \"data\": {\n        \"id\": \"834e5cb1-f005-421f-941b-12271218af49\",\n        \"name\": \"admin\",\n        \"email\": \"test2@gmail.com\",\n        \"createdAt\": \"2026-08-11T05:19:03.865Z\"\n    }\n}"
+            },
+            {
+              "name": "register-409",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"12345678\",\n    \"name\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "104"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:19:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"อีเมลนี้ถูกใช้งานแล้ว\",\n        \"statusCode\": 409\n    }\n}"
+            },
+            {
+              "name": "register-400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test2@gmail.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "364"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:19:50 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"name\",\n                \"message\": \"กรุณาระบุชื่อ\"\n            },\n            {\n                \"field\": \"password\",\n                \"message\": \"กรุณาระบุรหัสผ่าน\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "pm.environment.set(\"token\", res.data.sessionToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test4@gmail.com\",\n    \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "### Login\n\nเข้าสู่ระบบด้วย email และ password ระบบจะสร้าง session ที่มีอายุ 30 วัน และส่ง session token กลับมา\n\n`POST /api/v1/auth/login`\n\nไม่จำเป็นต้องส่ง Authorization header\n\n#### Headers\n\n| Header | Required | Description |\n| --- | --- | --- |\n| `Content-Type: application/json` | Yes | รูปแบบข้อมูลที่ส่ง |\n| `Accept-Language: th` หรือ `en` | No | ภาษาของข้อความตอบกลับ |\n| `User-Agent` | No | ใช้บันทึกข้อมูลอุปกรณ์ของ session |\n\n#### Request body\n\n| Field | Type | Required | Validation |\n| --- | --- | --- | --- |\n| `email` | string | Yes | ต้องเป็น email ที่ถูกต้อง ระบบจะ trim และแปลงเป็นตัวพิมพ์เล็ก |\n| `password` | string | Yes | ต้องไม่เป็นค่าว่าง |\n\nไม่อนุญาตให้ส่ง field อื่นนอกเหนือจากที่กำหนด\n\n#### Example request\n\n``` json\n{\n  \"email\": \"john@example.com\",\n  \"password\": \"12345678\"\n}\n\n ```"
+          },
+          "response": [
+            {
+              "name": "login-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test1@gmail.com\",\n    \"password\": \"12345678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "268"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:26:55 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"เข้าสู่ระบบสำเร็จ\",\n    \"data\": {\n        \"user\": {\n            \"id\": \"28019d1e-7968-4d0b-b975-ffc4f5f2fa31\",\n            \"email\": \"test1@gmail.com\",\n            \"name\": \"admin\"\n        },\n        \"sessionToken\": \"O0JnBUIVDrulxqqwxu2CciY3iiAq0__SprR5RkeXD94\",\n        \"expiresAt\": \"2026-09-10T05:26:55.365Z\"\n    }\n}"
+            },
+            {
+              "name": "login-401",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test1@gmail.com\",\n    \"password\": \"12678\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "122"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:29:29 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"อีเมลหรือรหัสผ่านไม่ถูกต้อง\",\n        \"statusCode\": 401\n    }\n}"
+            },
+            {
+              "name": "login-400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test1@gmail.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "295"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:29:54 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"password\",\n                \"message\": \"กรุณาระบุรหัสผ่าน\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "### Logout\n\nยกเลิก session ปัจจุบัน โดยกำหนดเวลา `revokedAt` ให้กับ session หลังจาก logout แล้ว token เดิมจะไม่สามารถใช้เรียก protected API ได้อีก\n\n`POST /api/v1/auth/logout`\n\nจำเป็นต้องยืนยันตัวตนด้วย session token\n\n#### Headers\n\n| Header | Required | Description |\n| --- | --- | --- |\n| `Authorization` | Yes | Session token ในรูปแบบ `Bearer` |\n| `Accept-Language` | No | ภาษาของข้อความตอบกลับ รองรับ `th` และ `en` |\n\nไม่จำเป็นต้องส่ง request body"
+          },
+          "response": [
+            {
+              "name": "logout-401",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/logout",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "207"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:40:13 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"เซสชันไม่ถูกต้องหรือหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง\",\n        \"statusCode\": 401\n    }\n}"
+            },
+            {
+              "name": "logout-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/logout",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "62"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 05:40:33 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"ออกจากระบบสำเร็จ\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "me",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/auth/me",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "me-200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/me",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "259"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 08 Aug 2026 05:11:20 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"ดึงข้อมูลผู้ใช้ปัจจุบันสำเร็จ\",\n    \"data\": {\n        \"id\": \"28019d1e-7968-4d0b-b975-ffc4f5f2fa31\",\n        \"email\": \"test1@gmail.com\",\n        \"name\": \"admin\",\n        \"preferredLanguage\": \"EN\",\n        \"createdAt\": \"2026-08-08T02:56:07.703Z\"\n    }\n}"
+            },
+            {
+              "name": "me-401",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/auth/me",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "207"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 07:48:18 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"เซสชันไม่ถูกต้องหรือหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง\",\n        \"statusCode\": 401\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "item": [
+        {
+          "name": "create-account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "pm.environment.set(\"accountId\", res.data.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"SCB\",\n    \"type\": \"BANK\",\n    \"openingBalance\": 10000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/accounts",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create-account-201",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"SCB\",\n    \"type\": \"BANK\",\n    \"openingBalance\": 100.32\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/account",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "account"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "159"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 08 Aug 2026 05:56:25 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"สร้างบัญชีสำเร็จ\",\n    \"data\": {\n        \"id\": \"9dac2e6c-b4ee-4230-8170-069c97d29b1d\",\n        \"name\": \"SCB\",\n        \"type\": \"BANK\",\n        \"currency\": \"THB\"\n    }\n}"
+            },
+            {
+              "name": "create-account-400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"SCB\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/accounts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "368"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 07:55:30 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"type\",\n                \"message\": \"กรุณาระบุ ประเภท\"\n            },\n            {\n                \"field\": \"openingBalance\",\n                \"message\": \"กรุณาระบุ openingBalance\"\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "create-account-401",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"SCB2\",\n    \"type\": \"BANK\",\n    \"openingBalance\": 100.32\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/accounts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "207"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 07:57:18 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"เซสชันไม่ถูกต้องหรือหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง\",\n        \"statusCode\": 401\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "get-accounts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/accounts?limit=11&page=1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "accounts"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "11"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get-accounts-200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/accounts?limit=10&page=1",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "263"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 07:59:48 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"ดึงรายการบัญชีสำเร็จ\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"c12e9c8d-3a24-4614-98f8-dc75f9fe8e7b\",\n                \"name\": \"SCB2\",\n                \"type\": \"BANK\",\n                \"currency\": \"THB\",\n                \"balance\": \"100.32\"\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 10,\n            \"total\": 1,\n            \"totalPages\": 1\n        }\n    }\n}"
+            },
+            {
+              "name": "get-accounts-400",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/accounts?limit=10&page=1&dasdasd",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "dasdasd",
+                      "value": null,
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "281"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:02:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"dasdasd\",\n                \"message\": \"dasdasd ไม่ถูกต้อง\"\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "get-accounts-401",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/accounts?limit=10&page=1",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "207"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:02:37 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"เซสชันไม่ถูกต้องหรือหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง\",\n        \"statusCode\": 401\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "update-account",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"TTB\",\n    \"type\": \"BANK\",\n    \"accountStatus\":\"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/accounts/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "c7270049-15fc-45be-92ab-42af74665ab2"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "update-account-200",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"TEST\",\n    \"type\": \"BANK\",\n    \"accountStatus\":\"ACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/account/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "account",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "9dac2e6c-b4ee-4230-8170-069c97d29b1d"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "188"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 08 Aug 2026 07:18:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"อัปเดตบัญชีสำเร็จ\",\n    \"data\": {\n        \"id\": \"9dac2e6c-b4ee-4230-8170-069c97d29b1d\",\n        \"name\": \"TEST\",\n        \"type\": \"BANK\",\n        \"currency\": \"THB\",\n        \"accountStatus\": \"ACTIVE\"\n    }\n}"
+            },
+            {
+              "name": "update-account-400",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"SCB\",\n    \"type\": \"BANK\",\n    \"accountStatus\":\"ACTIVEz\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/accounts/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "c12e9c8d-3a24-4614-98f8-dc75f9fe8e7b"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "326"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:06:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ข้อมูลบางรายการไม่ถูกต้อง กรุณาตรวจสอบแล้วลองอีกครั้ง\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"accountStatus\",\n                \"message\": \"accountStatus มีค่าที่ระบบไม่รองรับ\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "delete-account",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/accounts/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "c12e9c8d-3a24-4614-98f8-dc75f9fe8e7b"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "delete-account-200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/accounts/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "c12e9c8d-3a24-4614-98f8-dc75f9fe8e7b"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "53"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:07:21 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"ลบบัญชีสำเร็จ\"\n}"
+            },
+            {
+              "name": "delete-account-404",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/accounts/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "c12e9c8d-3a24-4614-98f8-dc75f9fe8e7a"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "71"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:08:39 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"ไม่พบบัญชี\",\n        \"statusCode\": 404\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "item": [
+        {
+          "name": "create-category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "pm.environment.set(\"categoryId\", res.data.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"BONUS\",\n    \"type\": \"INCOME\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/categories",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create-category-409",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"ทางด่วน\",\n    \"type\": \"EXPENSE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/categories",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "82"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:11:25 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"A category with this name already exists.\",\n        \"statusCode\": 409\n    }\n}"
+            },
+            {
+              "name": "create-category-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"เงินเดือน\",\n    \"type\": \"INCOME\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/categories",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "172"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:11:56 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Category created successfully.\",\n    \"data\": {\n        \"id\": \"d58069ed-0c82-4b27-97ee-77597f4a192a\",\n        \"name\": \"เงินเดือน\",\n        \"type\": \"INCOME\",\n        \"categoryStatus\": true\n    }\n}"
+            },
+            {
+              "name": "create-category-400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"เงินเดือน\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/categories",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "156"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:12:22 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"Some information is invalid. Please check and try again.\",\n        \"statusCode\": 400,\n        \"details\": [\n            {\n                \"field\": \"type\",\n                \"message\": \"Type is required.\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "get-categories",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/categories?page=1&limit=10&includeInactive=false",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "type",
+                  "value": "EXPENSE",
+                  "disabled": true
+                },
+                {
+                  "key": "includeInactive",
+                  "value": "false"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get-categories-200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/categories?page=1&limit=20",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "includeInactive",
+                      "value": "false",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "326"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 08 Aug 2026 08:09:00 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Categories retrieved successfully.\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"b3dada3c-3180-45ec-817d-ade06f75dd27\",\n                \"name\": \"Salary\",\n                \"type\": \"INCOME\",\n                \"categoryStatus\": true\n            },\n            {\n                \"id\": \"1397cdaa-5e0e-402c-ba93-3c404160bf90\",\n                \"name\": \"FOOD\",\n                \"type\": \"EXPENSE\",\n                \"categoryStatus\": true\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 20,\n            \"total\": 2,\n            \"totalPages\": 1\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "update-category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"โบนัส3\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/categories/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "categories",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "INCOME",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "includeInactive",
+                  "value": "false",
+                  "type": "text",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "d58069ed-0c82-4b27-97ee-77597f4a192a"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "update-category-200",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"Salary\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/categories/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "includeInactive",
+                      "value": "false",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "d58069ed-0c82-4b27-97ee-77597f4a192a"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "151"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:25:01 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Category updated successfully.\",\n    \"data\": {\n        \"id\": \"d58069ed-0c82-4b27-97ee-77597f4a192a\",\n        \"name\": \"Salary\",\n        \"type\": \"INCOME\",\n        \"categoryStatus\": true\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "delete-category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/categories/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "categories",
+                ":id"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "INCOME",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "includeInactive",
+                  "value": "false",
+                  "type": "text",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "d58069ed-0c82-4b27-97ee-77597f4a192a"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "delete-category-200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/categories/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "includeInactive",
+                      "value": "false",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "d58069ed-0c82-4b27-97ee-77597f4a192a"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "44"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:25:50 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Category deleted successfully.\"\n}"
+            },
+            {
+              "name": "delete-category-404",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/categories/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "includeInactive",
+                      "value": "false",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "d58069ed-0c82-4b27-97ee-77597f4a192a"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "60"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:27:03 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"Category not found.\",\n        \"statusCode\": 404\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transaction",
+      "item": [
+        {
+          "name": "create-transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "pm.environment.set(\"transactionId\", res.data.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"accountId\": \"{{accountId}}\",\n    \"categoryId\": \"c67e03ab-1ac9-4fed-80ff-ef1ccf98ce58\",\n    \"type\": \"INCOME\",\n    \"amount\": 1000,\n    \"transactionDate\": \"2026-08-08T14:30:00+07:00\",\n    \"note\": \"bonus\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/transactions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create-transaction-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"accountId\": \"{{accountId}}\",\n    \"categoryId\": \"{{categoryId}}\",\n    \"type\": \"INCOME\",\n    \"amount\": 2000,\n    \"transactionDate\": \"2026-08-08T14:30:00+07:00\",\n    \"note\": \"โบนัส\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/transactions",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "353"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:34:25 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Transaction created successfully.\",\n    \"data\": {\n        \"id\": \"b60fceeb-33bb-412f-8740-f19e91a4a97e\",\n        \"userId\": \"834e5cb1-f005-421f-941b-12271218af49\",\n        \"accountId\": \"7777eab8-fb7c-4f12-adfe-8d0f685a6360\",\n        \"categoryId\": \"39553bb6-5508-4cd4-8862-c3c58bc889b2\",\n        \"type\": \"INCOME\",\n        \"amount\": \"2000\",\n        \"note\": \"โบนัส\",\n        \"transactionDate\": \"2026-08-08T07:30:00.000Z\"\n    }\n}"
+            },
+            {
+              "name": "create-transaction-400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"accountId\": \"{{accountId}}\",\n    \"categoryId\": \"{{categoryId}}\",\n    \"type\": \"EXPENSE\",\n    \"amount\": 2000,\n    \"transactionDate\": \"2026-08-08T14:30:00+07:00\",\n    \"note\": \"โบนัส\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/transactions",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "83"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:35:40 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": {\n        \"message\": \"Category type must match transaction type.\",\n        \"statusCode\": 400\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "get-transactions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/transactions?limit=10&page=1&month=8&year=2026",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "type",
+                  "value": "EXPENSE",
+                  "disabled": true
+                },
+                {
+                  "key": "accountId",
+                  "value": "{{accountId}}",
+                  "disabled": true
+                },
+                {
+                  "key": "month",
+                  "value": "8"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2026-07-31T17:00:00.000Z",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-08-31T17:00:00.000Z",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get-transactions-200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/transactions?limit=10&page=1&month=8&year=2026",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "disabled": true
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "{{accountId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "month",
+                      "value": "8"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2026-07-31T17:00:00.000Z",
+                      "disabled": true
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-08-31T17:00:00.000Z",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "924"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:40:36 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Transactions retrieved successfully.\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"b1a29afa-83d1-40b5-8e25-b39577315a9c\",\n                \"account\": {\n                    \"id\": \"7777eab8-fb7c-4f12-adfe-8d0f685a6360\",\n                    \"name\": \"KBANK\"\n                },\n                \"category\": null,\n                \"type\": \"OPENING_BALANCE\",\n                \"amount\": \"5000.00\",\n                \"note\": \"Opening balance\",\n                \"transactionDate\": \"2026-08-11T08:31:13.032Z\"\n            },\n            {\n                \"id\": \"4755f6fb-c55f-4dd8-a105-ac1d5a207cd6\",\n                \"account\": {\n                    \"id\": \"c12e9c8d-3a24-4614-98f8-dc75f9fe8e7b\",\n                    \"name\": \"SCB\"\n                },\n                \"category\": null,\n                \"type\": \"OPENING_BALANCE\",\n                \"amount\": \"100.32\",\n                \"note\": \"Opening balance\",\n                \"transactionDate\": \"2026-08-11T07:56:11.396Z\"\n            },\n            {\n                \"id\": \"b60fceeb-33bb-412f-8740-f19e91a4a97e\",\n                \"account\": {\n                    \"id\": \"7777eab8-fb7c-4f12-adfe-8d0f685a6360\",\n                    \"name\": \"KBANK\"\n                },\n                \"category\": {\n                    \"id\": \"39553bb6-5508-4cd4-8862-c3c58bc889b2\",\n                    \"name\": \"โบนัส\"\n                },\n                \"type\": \"INCOME\",\n                \"amount\": \"2000.00\",\n                \"note\": \"โบนัส\",\n                \"transactionDate\": \"2026-08-08T07:30:00.000Z\"\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 10,\n            \"total\": 3,\n            \"totalPages\": 1\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "upload-images",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "7f78d67e-4295-4a8f-a6f0-f26841483adc",
+                  "src": "/Users/jame_m/Documents/63D58953-34F5-4C34-80D5-127454F39790_1_105_c.jpeg"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "a603534e-dfea-4ce6-84d9-92f7d03625e2",
+                  "src": "/Users/jame_m/Downloads/รูป/cat-2.jpeg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/transactions/:id/images",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "transactions",
+                ":id",
+                "images"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "e016527a-c9da-4a89-a797-5bf3b8f0e0a9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "upload-images-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "uuid": "c45286dd-22a2-4114-8a13-b36d8f0feb98",
+                      "src": "/Users/jame_m/Documents/63D58953-34F5-4C34-80D5-127454F39790_1_105_c.jpeg"
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "uuid": "5a7e884f-9903-4f78-8462-5c9ec6e694fb",
+                      "src": "/Users/jame_m/Downloads/46756E3E-4999-463D-AE9A-B0F13E3D5398.JPEG",
+                      "disabled": true
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "uuid": "db04ba07-bb14-4608-87b4-8597b074b5bf",
+                      "src": "/Users/jame_m/Downloads/Cloudflare_WARP_2026.6.880.0.pkg",
+                      "disabled": true
+                    },
+                    {
+                      "key": "files",
+                      "type": "file",
+                      "uuid": "7f78d67e-4295-4a8f-a6f0-f26841483adc",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/transactions/:id/images",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "transactions",
+                    ":id",
+                    "images"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{transactionId}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "461"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:45:02 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Images uploaded successfully.\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"67922493-94c5-4f16-a2f5-b752199546a7\",\n                \"transactionId\": \"b85de43e-958c-45f9-9cb9-16ace519f728\",\n                \"fileKey\": \"f4c4b5f8-650b-41a6-bcf2-9c11d7cd5216.jpg\",\n                \"fileName\": \"63D58953-34F5-4C34-80D5-127454F39790_1_105_c.jpeg\",\n                \"mimeType\": \"image/jpeg\",\n                \"fileSize\": 206621,\n                \"url\": \"https://pub-8aa8b480403f4da0bac5a9e73a4cf84c.r2.dev/f4c4b5f8-650b-41a6-bcf2-9c11d7cd5216.jpg\",\n                \"createdAt\": \"2026-08-11T08:45:02.609Z\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "budget",
+      "item": [
+        {
+          "name": "create-budget",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"categoryId\": \"df7de3b0-c307-4de3-8329-d3ac4ce8d70d\",\n    \"amount\": \"5000\",\n    \"month\": 8,\n    \"year\": 2026\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/budgets",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "budgets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create-budget-200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"categoryId\": \"13edce5b-413a-432f-a39b-515dd14aec5a\",\n    \"amount\": \"5000\",\n    \"month\": 8,\n    \"year\": 2026\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/budgets",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "budgets"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "185"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 11 Aug 2026 08:55:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Budget created successfully.\",\n    \"data\": {\n        \"id\": \"baea87f2-49cf-4a1e-9d1c-aefa53920ab3\",\n        \"categoryId\": \"13edce5b-413a-432f-a39b-515dd14aec5a\",\n        \"amount\": \"5000\",\n        \"month\": 8,\n        \"year\": 2026\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "get-budgets",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/budgets?month=8&year=2026",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "budgets"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "8"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get-budgets",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/budgets",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "budgets"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "324"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 16:00:08 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Budgets retrieved successfully.\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"95fe4157-cc59-43cf-aaf6-144b41d5212f\",\n                \"category\": {\n                    \"id\": \"1397cdaa-5e0e-402c-ba93-3c404160bf90\",\n                    \"name\": \"FOOD\"\n                },\n                \"amount\": 10005,\n                \"spentAmount\": 10000.35,\n                \"remainingAmount\": 4.65,\n                \"month\": 8,\n                \"year\": 2026\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 20,\n            \"total\": 1,\n            \"totalPages\": 1\n        }\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "session",
+      "item": [
+        {
+          "name": "get-sessions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/sessions?page=1&limit=10&includeRevoked=true",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "includeRevoked",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get-sessions",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/sessions?page=1&limit=10&includeRevoked=true",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sessions"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "includeRevoked",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1002"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 15:59:56 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Sessions retrieved successfully.\",\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": \"779f4cba-ac96-408e-8030-9339aca7bbd4\",\n                \"deviceName\": \"Apple iPhone 15\",\n                \"ipAddress\": \"127.0.0.1\",\n                \"createdAt\": \"2026-08-08T05:11:14.276Z\",\n                \"expiresAt\": \"2026-09-07T05:11:14.275Z\",\n                \"revokedAt\": null,\n                \"isCurrent\": true\n            },\n            {\n                \"id\": \"eca80322-aadd-450e-b48b-0ce2d6649ea9\",\n                \"deviceName\": \"Apple iPhone 15\",\n                \"ipAddress\": \"127.0.0.1\",\n                \"createdAt\": \"2026-08-08T04:33:52.695Z\",\n                \"expiresAt\": \"2026-09-07T04:33:52.694Z\",\n                \"revokedAt\": \"2026-08-08T04:57:03.192Z\",\n                \"isCurrent\": false\n            },\n            {\n                \"id\": \"8a4804ee-4679-44fd-bf92-d88a6c313ba0\",\n                \"deviceName\": \"Apple iPhone 15\",\n                \"ipAddress\": \"127.0.0.1\",\n                \"createdAt\": \"2026-08-08T04:02:31.576Z\",\n                \"expiresAt\": \"2026-09-07T04:02:31.575Z\",\n                \"revokedAt\": null,\n                \"isCurrent\": false\n            },\n            {\n                \"id\": \"b9a4cebb-af3d-429b-a71a-3492ac5d8987\",\n                \"deviceName\": \"Apple iPhone 15\",\n                \"ipAddress\": \"127.0.0.1\",\n                \"createdAt\": \"2026-08-08T03:51:06.200Z\",\n                \"expiresAt\": \"2026-09-07T03:51:06.199Z\",\n                \"revokedAt\": null,\n                \"isCurrent\": false\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 10,\n            \"total\": 4,\n            \"totalPages\": 1\n        }\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "report",
+      "item": [
+        {
+          "name": "summary",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/reports/summary",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reports",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "8",
+                  "disabled": true
+                },
+                {
+                  "key": "year",
+                  "value": "2026",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2026-06-31T17:00:00.000Z",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-08-31T17:00:00.000Z",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "summary",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/reports/summary?month=8&year=2026",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "summary"
+                  ],
+                  "query": [
+                    {
+                      "key": "month",
+                      "value": "8"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2026-07-31T17:00:00.000Z",
+                      "disabled": true
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-08-31T17:00:00.000Z",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "446"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 15:59:48 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Summary retrieved successfully.\",\n    \"data\": {\n        \"period\": {\n            \"month\": 8,\n            \"year\": 2026\n        },\n        \"summary\": [\n            {\n                \"account\": {\n                    \"id\": \"08407d5a-1d46-446e-9e95-751eb510a40a\",\n                    \"name\": \"KTB\",\n                    \"accountStatus\": \"ACTIVE\"\n                },\n                \"currency\": \"THB\",\n                \"totalIncome\": 50251.05,\n                \"totalExpense\": 10000.35,\n                \"netCashFlow\": 40250.7\n            },\n            {\n                \"account\": {\n                    \"id\": \"2f8d5f30-382e-418f-939a-1e3d67580aac\",\n                    \"name\": \"TTB\",\n                    \"accountStatus\": \"ACTIVE\"\n                },\n                \"currency\": \"THB\",\n                \"totalIncome\": 0,\n                \"totalExpense\": 70,\n                \"netCashFlow\": -70\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "categories",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/reports/categories?page=1&limit=10&startDate=2026-06-31T17:00:00.000Z&endDate=2026-08-31T17:00:00.000Z",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reports",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "month",
+                  "value": "8",
+                  "disabled": true
+                },
+                {
+                  "key": "year",
+                  "value": "2026",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2026-06-31T17:00:00.000Z"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-08-31T17:00:00.000Z"
+                },
+                {
+                  "key": "accountId",
+                  "value": "",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "type",
+                  "value": "INCOME",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "categories",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/reports/categories?page=1&limit=10&startDate=2026-07-31T17:00:00.000Z&endDate=2026-08-31T17:00:00.000Z",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "month",
+                      "value": "8",
+                      "disabled": true
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026",
+                      "disabled": true
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2026-07-31T17:00:00.000Z"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-08-31T17:00:00.000Z"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "type",
+                      "value": "INCOME",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "567"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 15:59:42 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Category report retrieved successfully.\",\n    \"data\": {\n        \"period\": {\n            \"startDate\": \"2026-07-31T17:00:00.000Z\",\n            \"endDate\": \"2026-08-31T17:00:00.000Z\"\n        },\n        \"items\": [\n            {\n                \"category\": {\n                    \"id\": \"1397cdaa-5e0e-402c-ba93-3c404160bf90\",\n                    \"name\": \"FOOD\"\n                },\n                \"type\": \"EXPENSE\",\n                \"currency\": \"THB\",\n                \"totalAmount\": 10000.35,\n                \"transactionCount\": 1,\n                \"percentage\": 99.3\n            },\n            {\n                \"category\": {\n                    \"id\": \"5fa548ca-267e-49fa-9480-bca82ad5c879\",\n                    \"name\": \"ทางด่วน\"\n                },\n                \"type\": \"EXPENSE\",\n                \"currency\": \"THB\",\n                \"totalAmount\": 70,\n                \"transactionCount\": 3,\n                \"percentage\": 0.7\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 10,\n            \"total\": 2,\n            \"totalPages\": 1\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "daily allowance",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/reports/daily-allowance",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reports",
+                "daily-allowance"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "daily allowance",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "th",
+                    "type": "text"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "FlowPocket-iOS/1.0 (iPhone 15; iOS 18.0)",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/reports/daily-allowance",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "daily-allowance"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "th"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "240"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 14:36:29 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Daily allowance retrieved successfully.\",\n    \"data\": {\n        \"period\": {\n            \"month\": 8,\n            \"year\": 2026,\n            \"daysRemaining\": 22\n        },\n        \"items\": [\n            {\n                \"currency\": \"THB\",\n                \"totalIncome\": 50251.05,\n                \"totalExpense\": 10070.35,\n                \"remainingAmount\": 40180.7,\n                \"dailyAllowance\": 1826.4\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "daily budget",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "th",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/reports/daily-budget",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reports",
+                "daily-budget"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "daily budget",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/reports/daily-budget",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "reports",
+                    "daily-budget"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-language",
+                  "value": "en"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "275"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Aug 2026 15:58:38 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Daily budget report retrieved successfully.\",\n    \"data\": {\n        \"period\": {\n            \"month\": 8,\n            \"year\": 2026,\n            \"daysRemaining\": 22\n        },\n        \"items\": [\n            {\n                \"currency\": \"THB\",\n                \"totalBudget\": 10005,\n                \"budgetSpent\": 10000.35,\n                \"budgetRemaining\": 4.649999999999636,\n                \"budgetRemainingPerDay\": 0.21,\n                \"overspentAmount\": 0\n            }\n        ]\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "export",
+      "item": [
+        {
+          "name": "export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/export",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "export"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

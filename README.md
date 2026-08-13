@@ -261,6 +261,7 @@ docker compose down
 
 - [Online API Documentation](https://joint-operations-astronomer-80953780-s-team.docs.buildwithfern.com/flow-pocket/auth/me)
 - [API Documentation](docs/API.md)
+- [API Docs Postman](docs/flow-pocket.postman_collection.json)
 - [Business Flow](docs/BUSSINESS_FLOW.md)
 
 ## Future Improvements
