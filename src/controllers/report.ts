@@ -51,6 +51,7 @@ export const getReportSummary = async (
     const { startDate, endDate } = getBangkokMonthRange(
       query.year,
       query.month,
+      request.t,
     );
 
     transactionQuery
@@ -78,7 +79,11 @@ export const getReportSummary = async (
     period = { startDate: query.startDate, endDate: query.endDate };
   } else {
     const { month, year } = getBangkokDateParts();
-    const { startDate, endDate } = getBangkokMonthRange(year, month);
+    const { startDate, endDate } = getBangkokMonthRange(
+      year,
+      month,
+      request.t,
+    );
 
     transactionQuery
       .andWhere("transaction.transaction_date >= :startDate", { startDate })
@@ -205,6 +210,7 @@ export const getReportCategories = async (
     const { startDate, endDate } = getBangkokMonthRange(
       query.year,
       query.month,
+      request.t,
     );
     transactionQuery
       .andWhere("transaction.transaction_date >= :startDate", {
@@ -231,7 +237,11 @@ export const getReportCategories = async (
     period = { startDate: query.startDate, endDate: query.endDate };
   } else {
     const { month, year } = getBangkokDateParts();
-    const { startDate, endDate } = getBangkokMonthRange(year, month);
+    const { startDate, endDate } = getBangkokMonthRange(
+      year,
+      month,
+      request.t,
+    );
 
     transactionQuery
       .andWhere("transaction.transaction_date >= :startDate", { startDate })
@@ -321,7 +331,11 @@ export const getReportDailyAllowance = async (
   const userId = checkNotNullUserId(request);
   const now = new Date();
   const { year, month, day } = getBangkokDateParts(now);
-  const { startDate: startOfMonth } = getBangkokMonthRange(year, month);
+  const { startDate: startOfMonth } = getBangkokMonthRange(
+    year,
+    month,
+    request.t,
+  );
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const daysRemaining = daysInMonth - day + 1;
   const period = {
@@ -393,7 +407,11 @@ export const getReportDailyBudget = async (
   const userId = checkNotNullUserId(request);
   const now = new Date();
   const { year, month, day } = getBangkokDateParts(now);
-  const { startDate: startOfMonth } = getBangkokMonthRange(year, month);
+  const { startDate: startOfMonth } = getBangkokMonthRange(
+    year,
+    month,
+    request.t,
+  );
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const daysRemaining = daysInMonth - day + 1;
   const period = {

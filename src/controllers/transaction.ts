@@ -14,6 +14,7 @@ import { success } from "../utils/response";
 import { deleteFromS3, UploadedImage, uploadToS3 } from "../utils/s3";
 import { Image } from "../entities/image.entity";
 import { censorWords } from "../utils/words-filter";
+import { getBangkokMonthRange } from "../utils/date";
 
 type UserTransactionType = TransactionType.INCOME | TransactionType.EXPENSE;
 
@@ -149,17 +150,18 @@ export const getTransactions = async (
 
   // filter month and year
   if (query.month !== undefined && query.year !== undefined) {
-    // -1 ตาม index javascript, วันที่ 1
-    const startOfMonth = new Date(Date.UTC(query.year, query.month - 1, 1));
-
-    const startOfNextMonth = new Date(Date.UTC(query.year, query.month, 1));
+    const { endDate, startDate } = getBangkokMonthRange(
+      query.year,
+      query.month,
+      request.t,
+    );
 
     transactionQuery
-      .andWhere("transaction.transaction_date >= :startOfMonth", {
-        startOfMonth,
+      .andWhere("transaction.transaction_date >= :startDate", {
+        startDate,
       })
-      .andWhere("transaction.transaction_date < :startOfNextMonth", {
-        startOfNextMonth,
+      .andWhere("transaction.transaction_date < :endDate", {
+        endDate,
       });
   } else {
     // filter startDate or endDate
@@ -168,9 +170,8 @@ export const getTransactions = async (
         startDate: query.startDate,
       });
     }
-
     if (query.endDate) {
-      transactionQuery.andWhere("transaction.transaction_date <= :endDate", {
+      transactionQuery.andWhere("transaction.transaction_date < :endDate", {
         endDate: query.endDate,
       });
     }

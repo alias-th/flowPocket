@@ -33,7 +33,8 @@
   "dateFilter": {
     "monthYearTogether": "Month and year must be provided together.",
     "conflict": "Month and year cannot be used together with start date or end date.",
-    "invalidRange": "Start date must not be after end date."
+    "invalidRange": "Start date must not be after end date.",
+    "invalidYearOrMonth": "Year or month is invalid."
   },
   "image": {
     "multipartRequired": "The request must use multipart/form-data.",
