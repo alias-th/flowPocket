@@ -386,3 +386,125 @@ export const uploadImages = async (
     throw new AppError(500, request.t("image.uploadFailed"));
   }
 };
+
+interface UpdateTransactionBody {
+  accountId?: string;
+  categoryId?: string | null;
+  type?: UserTransactionType;
+  amount?: number;
+  note?: string | null;
+  transactionDate?: Date;
+}
+interface TransactionIdParam {
+  id: string;
+}
+
+export const updateTransaction = async (
+  request: FastifyRequest<{
+    Params: TransactionIdParam;
+    Body: UpdateTransactionBody;
+  }>,
+  reply: FastifyReply,
+) => {
+  const body = request.body;
+  const userId = checkNotNullUserId(request);
+  const datasource = request.server.db;
+  const categoryRepo = datasource.getRepository(Category);
+  const accountRepo = datasource.getRepository(Account);
+  const transactionRepo = datasource.getRepository(Transaction);
+
+  // 1. check transaction
+  const transaction = await transactionRepo.findOneBy({
+    id: request.params.id,
+    userId,
+  });
+
+  if (!transaction) {
+    throw new AppError(404, request.t("transaction.notFound"));
+  }
+  if (transaction.type === TransactionType.OPENING_BALANCE) {
+    throw new AppError(409, request.t("transaction.openingBalanceNotEditable"));
+  }
+
+  // 2. check account
+  if (body.accountId !== undefined) {
+    const account = await accountRepo.findOneBy({
+      id: body.accountId,
+      userId,
+      accountStatus: AccountStatus.ACTIVE,
+    });
+
+    if (!account) {
+      throw new AppError(404, request.t("account.notFound"));
+    }
+  }
+
+  // 3. check category
+  let category: Category | null = null;
+
+  if (body.categoryId !== undefined && body.categoryId !== null) {
+    category = await categoryRepo.findOneBy({
+      id: body.categoryId,
+      userId,
+      categoryStatus: true,
+    });
+
+    if (!category) {
+      throw new AppError(404, request.t("category.notFound"));
+    }
+
+    // 4. check type by category
+  } else if (body.type !== undefined && transaction.categoryId !== null) {
+    category = await categoryRepo.findOneBy({
+      id: transaction.categoryId,
+      userId,
+    });
+
+    if (!category) {
+      throw new AppError(404, request.t("category.notFound"));
+    }
+  }
+
+  const updatedType = body.type ?? transaction.type;
+  if (category && category.type !== categoryTypeForTransaction[updatedType]) {
+    throw new AppError(400, request.t("transaction.categoryTypeMismatch"));
+  }
+
+  if (body.accountId !== undefined) {
+    transaction.accountId = body.accountId;
+  }
+
+  if (body.categoryId !== undefined) {
+    transaction.categoryId = body.categoryId;
+  }
+
+  if (body.type !== undefined) {
+    transaction.type = body.type;
+  }
+
+  if (body.amount !== undefined) {
+    transaction.amount = String(body.amount);
+  }
+
+  if (body.note !== undefined) {
+    transaction.note = body.note === null ? null : censorWords(body.note);
+  }
+
+  if (body.transactionDate !== undefined) {
+    transaction.transactionDate = body.transactionDate;
+  }
+
+  const updatedTransaction = await transactionRepo.save(transaction);
+
+  return reply.code(200).send(
+    success(request.t("transaction.update.success"), {
+      id: updatedTransaction.id,
+      accountId: updatedTransaction.accountId,
+      categoryId: updatedTransaction.categoryId,
+      type: updatedTransaction.type,
+      amount: updatedTransaction.amount,
+      note: updatedTransaction.note,
+      transactionDate: updatedTransaction.transactionDate,
+    }),
+  );
+};

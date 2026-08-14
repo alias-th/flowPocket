@@ -551,7 +551,7 @@
    - Filter by `account_id` when `accountId` is provided
    - Filter by the selected `month` and `year` when provided
    - Otherwise, filter from `transaction_date >= startDate` when provided
-   - Otherwise, filter until `transaction_date <= endDate` when provided
+   - Otherwise, filter until `transaction_date < endDate` when provided
    - Join `accounts` to return account information
    - Left join `categories` to return category information
    - Sort by `transaction_date DESC`, then `created_at DESC`
