@@ -1,16 +1,29 @@
 import { FastifyInstance } from "fastify";
 import * as sessionController from "../controllers/session";
-import { getSessionsSchema } from "../schemas/session.schema";
+import {
+  deleteSessionParamsSchema,
+  getSessionsSchema,
+} from "../schemas/session.schema";
 
 const sessionRoutes = async function (fastify: FastifyInstance) {
+  fastify.addHook("preHandler", fastify.authentication);
+
   fastify.route({
     method: "GET",
     url: "/",
     schema: {
       querystring: getSessionsSchema,
     },
-    preHandler: fastify.authentication,
     handler: sessionController.getSessions,
+  });
+
+  fastify.route({
+    method: "DELETE",
+    url: "/:sessionId",
+    schema: {
+      params: deleteSessionParamsSchema,
+    },
+    handler: sessionController.deleteSessionById,
   });
 };
 

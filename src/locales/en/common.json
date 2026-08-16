@@ -130,6 +130,10 @@
   "session": {
     "get": {
       "success": "Sessions retrieved successfully."
+    },
+    "notFound": "Session not found.",
+    "delete": {
+      "success": "Session logged out successfully."
     }
   },
   "report": {
@@ -151,6 +155,7 @@
       "success": "Data exported successfully."
     }
   },
+
   "common": {
     "internalServerError": "Internal server error",
     "routeNotFound": "Route is not found."

@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { Session } from "../entities/session.entity";
 import { checkNotNullUserId } from "../utils/common";
 import { success } from "../utils/response";
+import { AppError } from "../utils/app-error";
+import { IsNull } from "typeorm";
 
 interface GetSessionsQuery {
   page?: number;
@@ -57,4 +59,29 @@ export const getSessions = async (
       },
     }),
   );
+};
+
+interface SessionParams {
+  sessionId: string;
+}
+export const deleteSessionById = async (
+  req: FastifyRequest<{ Params: SessionParams }>,
+  reply: FastifyReply,
+) => {
+  const { sessionId } = req.params;
+  const userId = checkNotNullUserId(req);
+  const datasource = req.server.db;
+  const sessionRepo = datasource.getRepository(Session);
+  const session = await sessionRepo.findOneBy({
+    id: sessionId,
+    userId,
+    revokedAt: IsNull(),
+  });
+  if (!session) {
+    throw new AppError(404, req.t("session.notFound"));
+  }
+  session.revokedAt = new Date();
+  await sessionRepo.save(session);
+
+  return reply.code(200).send(success(req.t("session.delete.success")));
 };

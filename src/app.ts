@@ -108,7 +108,7 @@ async function buildApp() {
       },
     });
 
-  const fastify = Fastify({ bodyLimit: 50 * 1024 * 1024, logger: logger });
+  const fastify = Fastify({ logger: logger });
   await fastify.register(cors);
   await fastify.register(fastifyEnv, envOptions);
   await fastify.register(databasePlugin);

@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+personal/
 
 # TypeScript build output
 dist/

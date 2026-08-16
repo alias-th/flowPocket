@@ -5,3 +5,7 @@ export const getSessionsSchema = Joi.object({
   limit: Joi.number().integer().positive().max(100).default(20),
   includeRevoked: Joi.boolean().default(false),
 }).unknown(false);
+
+export const deleteSessionParamsSchema = Joi.object({
+  sessionId: Joi.string().uuid().required(),
+});
