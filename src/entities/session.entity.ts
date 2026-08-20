@@ -18,9 +18,6 @@ export class Session {
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;
 
-  @Column({ name: "token_hash", type: "varchar", unique: true })
-  tokenHash!: string;
-
   @Column({ name: "device_name", type: "varchar", nullable: true })
   deviceName!: string | null;
 
@@ -29,13 +26,6 @@ export class Session {
 
   @Column({ name: "ip_address", type: "varchar", nullable: true })
   ipAddress!: string | null;
-
-  @Index()
-  @Column({ name: "expires_at", type: "timestamptz" })
-  expiresAt!: Date;
-
-  @Column({ name: "revoked_at", type: "timestamptz", nullable: true })
-  revokedAt!: Date | null;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt!: Date;
@@ -49,7 +39,6 @@ export class Session {
     name: "access_token_hash",
     type: "varchar",
     unique: true,
-    nullable: true,
   })
   accessTokenHash!: string;
 
@@ -57,7 +46,6 @@ export class Session {
     name: "refresh_token_hash",
     type: "varchar",
     unique: true,
-    nullable: true,
   })
   refreshTokenHash!: string;
 

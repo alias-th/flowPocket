@@ -114,11 +114,9 @@ export const login = async (
 
   const newSession = new Session();
   newSession.userId = existingAccount.id;
-  newSession.tokenHash = accessTokenHashed;
   newSession.deviceName = userAgent.deviceName;
   newSession.ipAddress = userAgent.ipAddress;
   newSession.userAgent = userAgent.userAgent;
-  newSession.expiresAt = accessTokenExpiresAt;
 
   // new field
   newSession.accessTokenHash = accessTokenHashed;
@@ -134,9 +132,6 @@ export const login = async (
         email: existingAccount.email,
         name: existingAccount.name,
       },
-      sessionToken: accessRawToken,
-      expiresAt: accessTokenExpiresAt,
-      // new field
       accessToken: accessRawToken,
       refreshToken: refreshRawToken,
       accessTokenExpiresAt,
@@ -187,13 +182,9 @@ export const refreshToken = async (
       refreshTokenExpiresAt: MoreThan(new Date()),
     },
     {
-      tokenHash: accessTokenHashed,
-      expiresAt: accessTokenExpiresAt,
-
       accessTokenHash: accessTokenHashed,
       accessTokenExpiresAt,
       accessTokenRevokedAt: null,
-
       refreshTokenHash: refreshTokenHashed,
       refreshTokenExpiresAt,
       refreshTokenRevokedAt: null,
@@ -223,7 +214,6 @@ export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
     Session,
     { id: sessionId, userId: userId },
     {
-      revokedAt: expiresDate,
       accessTokenRevokedAt: expiresDate,
       refreshTokenRevokedAt: expiresDate,
     },
