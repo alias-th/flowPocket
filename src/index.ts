@@ -24,6 +24,8 @@ declare module "fastify" {
       S3_SECRET_ACCESS_KEY: string;
       S3_BUCKET_NAME: string;
       S3_PUBLIC_URL: string;
+      ACCESS_TOKEN_TTL_SECONDS: string;
+      REFRESH_TOKEN_TTL_SECONDS: string;
     };
     authentication(request: FastifyRequest, reply: FastifyReply): void;
   }

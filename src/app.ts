@@ -9,7 +9,7 @@ import middleware from "i18next-http-middleware";
 import authRoutes from "./routes/auth";
 import accountRoutes from "./routes/account";
 import { fail } from "./utils/response";
-import protectRoutePlugin from "./plugins/protectRoute.plugin";
+import protectRoutePlugin from "./plugins/authentication.plugin";
 import categoryRoutes from "./routes/category";
 import transactionRoutes from "./routes/transaction";
 import imageRoutes from "./routes/image";
@@ -72,6 +72,8 @@ const envOptions = {
       S3_PUBLIC_URL: {
         type: "string",
       },
+      ACCESS_TOKEN_TTL_SECONDS: { type: "string" },
+      REFRESH_TOKEN_TTL_SECONDS: { type: "string" },
     },
   },
 };

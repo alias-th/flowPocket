@@ -14,3 +14,7 @@ export const loginSchema = Joi.object({
   email: Joi.string().trim().lowercase().email().required(),
   password: Joi.string().required(),
 }).unknown(false);
+
+export const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().trim().required(),
+}).unknown(false);

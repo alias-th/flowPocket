@@ -43,4 +43,51 @@ export class Session {
   @ManyToOne(() => User, (user) => user.sessions)
   @JoinColumn({ name: "user_id" })
   user!: User;
+
+  // new field
+  @Column({
+    name: "access_token_hash",
+    type: "varchar",
+    unique: true,
+    nullable: true,
+  })
+  accessTokenHash!: string;
+
+  @Column({
+    name: "refresh_token_hash",
+    type: "varchar",
+    unique: true,
+    nullable: true,
+  })
+  refreshTokenHash!: string;
+
+  @Column({
+    name: "access_token_revoked_at",
+    type: "timestamptz",
+    nullable: true,
+  })
+  accessTokenRevokedAt!: Date | null;
+
+  @Column({
+    name: "refresh_token_revoked_at",
+    type: "timestamptz",
+    nullable: true,
+  })
+  refreshTokenRevokedAt!: Date | null;
+
+  @Index()
+  @Column({
+    name: "access_token_expires_at",
+    type: "timestamptz",
+    nullable: true,
+  })
+  accessTokenExpiresAt!: Date;
+
+  @Index()
+  @Column({
+    name: "refresh_token_expires_at",
+    type: "timestamptz",
+    nullable: true,
+  })
+  refreshTokenExpiresAt!: Date;
 }

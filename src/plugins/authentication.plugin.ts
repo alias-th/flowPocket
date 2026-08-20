@@ -5,7 +5,7 @@ import { Session } from "../entities/session.entity";
 import { IsNull, MoreThan } from "typeorm";
 import { AppError } from "../utils/app-error";
 
-const protectRoutePlugin: FastifyPluginCallback = fp(
+const authenticationPlugin: FastifyPluginCallback = fp(
   function (fastify, _opts, done) {
     fastify.decorateRequest("userId", null);
     fastify.decorateRequest("sessionId", null);
@@ -28,9 +28,9 @@ const protectRoutePlugin: FastifyPluginCallback = fp(
         const hashedToken = hashToken(rawToken, secretMessage);
         const datasource = request.server.db;
         const session = await datasource.manager.findOneBy(Session, {
-          tokenHash: hashedToken,
-          revokedAt: IsNull(),
-          expiresAt: MoreThan(new Date()),
+          accessTokenHash: hashedToken,
+          accessTokenRevokedAt: IsNull(),
+          accessTokenExpiresAt: MoreThan(new Date()),
         });
 
         if (!session) {
@@ -46,4 +46,4 @@ const protectRoutePlugin: FastifyPluginCallback = fp(
   },
 );
 
-export default protectRoutePlugin;
+export default authenticationPlugin;

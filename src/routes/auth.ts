@@ -1,6 +1,10 @@
 import { FastifyInstance } from "fastify";
 import * as authController from "../controllers/auth";
-import { loginSchema, registerSchema } from "../schemas/auth.schema";
+import {
+  loginSchema,
+  refreshTokenSchema,
+  registerSchema,
+} from "../schemas/auth.schema";
 
 const authRoutes = async function (fastify: FastifyInstance) {
   fastify.post(
@@ -21,6 +25,17 @@ const authRoutes = async function (fastify: FastifyInstance) {
     },
     authController.login,
   );
+
+  fastify.post(
+    "/refresh-token",
+    {
+      schema: {
+        body: refreshTokenSchema,
+      },
+    },
+    authController.refreshToken,
+  );
+
   fastify.route({
     method: "POST",
     url: "/logout",

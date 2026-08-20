@@ -60,6 +60,9 @@
       "success": "Login successful.",
       "invalidCredentials": "Email or password is incorrect."
     },
+    "refresh": {
+      "success": "Token refreshed successfully."
+    },
     "logout": {
       "success": "Logout successful."
     },

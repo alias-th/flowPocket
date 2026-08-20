@@ -16,7 +16,7 @@ const thaiPatterns = blockedWords.th.map(
 /** 
 \p{L} ตัวอักษรทุกภาษา
 \p{N} ตัวเลข
-_ 
+_  Regular Expression
  */
 const englishPatterns = [...blockedWords.en]
   .sort((first, second) => second.length - first.length)

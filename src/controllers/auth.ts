@@ -5,7 +5,8 @@ import { AppError } from "../utils/app-error";
 import bcrypt from "bcrypt";
 import { UAParser } from "ua-parser-js";
 import { Session } from "../entities/session.entity";
-import { generateSessionToken } from "../utils/token";
+import { generateSessionToken, hashToken } from "../utils/token";
+import { IsNull, MoreThan } from "typeorm";
 
 interface RegisterBody {
   name: string;
@@ -92,22 +93,38 @@ export const login = async (
   };
 
   // 4. Generate random secure session token
-  const { hashedToken, rawToken } = generateSessionToken(
-    request.server.config.SESSION_TOKEN_SECRET,
-  );
+  const { hashedToken: accessTokenHashed, rawToken: accessRawToken } =
+    generateSessionToken(request.server.config.SESSION_TOKEN_SECRET);
+  const { hashedToken: refreshTokenHashed, rawToken: refreshRawToken } =
+    generateSessionToken(request.server.config.SESSION_TOKEN_SECRET);
 
   // 5. Create session
-  const SESSION_TTL_DAYS = 30;
-  const expiresAt = new Date(
-    Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000,
+  const accessTokenTtlSecondes = Number(
+    request.server.config.ACCESS_TOKEN_TTL_SECONDS,
   );
+  const refreshTokenTtlSeconds = Number(
+    request.server.config.REFRESH_TOKEN_TTL_SECONDS,
+  );
+  const accessTokenExpiresAt = new Date(
+    Date.now() + accessTokenTtlSecondes * 1000,
+  );
+  const refreshTokenExpiresAt = new Date(
+    Date.now() + refreshTokenTtlSeconds * 1000,
+  );
+
   const newSession = new Session();
   newSession.userId = existingAccount.id;
-  newSession.tokenHash = hashedToken;
+  newSession.tokenHash = accessTokenHashed;
   newSession.deviceName = userAgent.deviceName;
   newSession.ipAddress = userAgent.ipAddress;
   newSession.userAgent = userAgent.userAgent;
-  newSession.expiresAt = expiresAt;
+  newSession.expiresAt = accessTokenExpiresAt;
+
+  // new field
+  newSession.accessTokenHash = accessTokenHashed;
+  newSession.refreshTokenHash = refreshTokenHashed;
+  newSession.accessTokenExpiresAt = accessTokenExpiresAt;
+  newSession.refreshTokenExpiresAt = refreshTokenExpiresAt;
 
   await datasource.manager.save(newSession);
   return reply.code(200).send(
@@ -117,8 +134,82 @@ export const login = async (
         email: existingAccount.email,
         name: existingAccount.name,
       },
-      sessionToken: rawToken,
-      expiresAt,
+      sessionToken: accessRawToken,
+      expiresAt: accessTokenExpiresAt,
+      // new field
+      accessToken: accessRawToken,
+      refreshToken: refreshRawToken,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
+    }),
+  );
+};
+
+interface RefreshTokenBody {
+  refreshToken: string;
+}
+export const refreshToken = async (
+  request: FastifyRequest<{ Body: RefreshTokenBody }>,
+  reply: FastifyReply,
+) => {
+  const refreshTokenRaw = request.body.refreshToken;
+  const datasource = request.server.db;
+  const sessionRepo = datasource.getRepository(Session);
+
+  // hash refresh token
+  const secretMessage = request.server.config.SESSION_TOKEN_SECRET;
+  const refreshTokenHash = hashToken(refreshTokenRaw, secretMessage);
+
+  // generate new access_token, refresh_token
+  const { hashedToken: accessTokenHashed, rawToken: accessRawToken } =
+    generateSessionToken(request.server.config.SESSION_TOKEN_SECRET);
+  const { hashedToken: refreshTokenHashed, rawToken: refreshRawToken } =
+    generateSessionToken(request.server.config.SESSION_TOKEN_SECRET);
+
+  const accessTokenTtlSecondes = Number(
+    request.server.config.ACCESS_TOKEN_TTL_SECONDS,
+  );
+  const refreshTokenTtlSeconds = Number(
+    request.server.config.REFRESH_TOKEN_TTL_SECONDS,
+  );
+  const accessTokenExpiresAt = new Date(
+    Date.now() + accessTokenTtlSecondes * 1000,
+  );
+  const refreshTokenExpiresAt = new Date(
+    Date.now() + refreshTokenTtlSeconds * 1000,
+  );
+
+  // update
+  const result = await sessionRepo.update(
+    {
+      refreshTokenHash,
+      refreshTokenRevokedAt: IsNull(),
+      refreshTokenExpiresAt: MoreThan(new Date()),
+    },
+    {
+      tokenHash: accessTokenHashed,
+      expiresAt: accessTokenExpiresAt,
+
+      accessTokenHash: accessTokenHashed,
+      accessTokenExpiresAt,
+      accessTokenRevokedAt: null,
+
+      refreshTokenHash: refreshTokenHashed,
+      refreshTokenExpiresAt,
+      refreshTokenRevokedAt: null,
+    },
+  );
+
+  if (result.affected !== 1) {
+    throw new AppError(401, request.t("auth.unauthorized"));
+  }
+
+  return reply.code(200).send(
+    success(request.t("auth.refresh.success"), {
+      accessToken: accessRawToken,
+      refreshToken: refreshRawToken,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
     }),
   );
 };
@@ -127,11 +218,14 @@ export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
   const datasource = request.server.db;
   const sessionId = request.sessionId;
   const userId = request.userId;
+  const expiresDate = new Date();
   await datasource.manager.update(
     Session,
     { id: sessionId, userId: userId },
     {
-      revokedAt: new Date(),
+      revokedAt: expiresDate,
+      accessTokenRevokedAt: expiresDate,
+      refreshTokenRevokedAt: expiresDate,
     },
   );
 
