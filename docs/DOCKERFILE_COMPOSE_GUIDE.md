@@ -143,6 +143,22 @@ EXPOSE 8080
 บันทึกว่า container คาดว่าจะรับ traffic ที่ port `8080` แต่ไม่ได้เปิด port บน host การ publish port ทำใน Compose ด้วย `ports`
 
 ```dockerfile
+HEALTHCHECK --interval=30s \
+  --timeout=5s \
+  --start-period=10s \
+  --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:8080/health').then(response => { if (!response.ok) process.exit(1) }).catch(() => process.exit(1))"
+```
+
+Docker เรียก `GET /health` ภายใน container ทุก 30 วินาที:
+
+- HTTP `200–299` ทำให้ command คืน exit code `0`
+- HTTP `503`, connection error หรือ timeout ทำให้คืน exit code `1`
+- หลังล้มเหลวติดต่อกัน 3 ครั้ง container health จะเป็น `unhealthy`
+
+Endpoint `/health` ตรวจทั้ง application process และ PostgreSQL ด้วย `SELECT 1` โดยตอบ `200` เมื่อพร้อม และ `503` เมื่อ database ใช้งานไม่ได้
+
+```dockerfile
 CMD ["node", "dist/index.js"]
 ```
 
@@ -569,10 +585,10 @@ PostgreSQL initialization variables ไม่เปลี่ยน user/password
 
 ## 13. ข้อจำกัดและงาน production ที่ควรเพิ่ม
 
-โครงสร้างปัจจุบันใช้งาน production-like ได้ แต่ควรเพิ่มก่อนรับ traffic จริง:
+โครงสร้างปัจจุบันมี application health check แล้ว แต่ควรเพิ่มงานต่อไปนี้ก่อนรับ traffic จริง:
 
-- health endpoint เช่น `GET /health`
-- Docker health check สำหรับ `app`
+- automated smoke test ที่เรียก `GET /health` หลัง deployment
+- load balancer/reverse proxy health check ที่เรียก endpoint เดียวกัน
 - รัน application ด้วย non-root user ใน Dockerfile
 - pin base images ด้วย version/digest ตามนโยบาย supply chain
 - container vulnerability scan
@@ -592,7 +608,7 @@ PostgreSQL initialization variables ไม่เปลี่ยน user/password
 - [x] final image ติดตั้งเฉพาะ production dependencies
 - [x] copy compiled output จาก builder
 - [ ] ใช้ non-root user
-- [ ] มี application health check
+- [x] มี application health check ผ่าน `GET /health`
 - [ ] pin base image ตามนโยบาย production
 
 ### Development Compose
@@ -611,7 +627,7 @@ PostgreSQL initialization variables ไม่เปลี่ยน user/password
 - [x] รัน migration ก่อน app
 - [x] PostgreSQL admin port bind กับ `127.0.0.1`
 - [x] แยก production volume จาก development
-- [ ] มี app health check
+- [x] มี app health check
 - [ ] deploy ด้วย SHA/version แทน `latest`
 - [ ] มี backup, monitoring และ rollback runbook
 
