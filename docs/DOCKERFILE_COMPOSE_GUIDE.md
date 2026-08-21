@@ -62,6 +62,8 @@ runner stage
 
 ข้อดีคือ final image ไม่มี TypeScript source, compiler และ development dependencies ที่ไม่จำเป็นต่อ runtime
 
+GitHub Actions ใช้ QEMU และ Docker Buildx สร้าง image จาก Dockerfile นี้สำหรับทั้ง `linux/amd64` และ `linux/arm64` เพื่อรองรับ x86 servers และเครื่อง Apple Silicon/ARM
+
 ## 2. อธิบาย Dockerfile ทีละส่วน
 
 ### Builder stage

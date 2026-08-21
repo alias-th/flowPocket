@@ -285,6 +285,9 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -300,6 +303,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: false
           tags: montonjm/flowpocket:test
 
@@ -308,6 +312,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             montonjm/flowpocket:latest

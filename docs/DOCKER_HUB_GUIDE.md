@@ -480,15 +480,17 @@ Workflow `.github/workflows/docker.yml` ทำงานดังนี้:
 ### Pull Request เข้า `main`
 
 ```yaml
+platforms: linux/amd64,linux/arm64
 push: false
 tags: montonjm/flowpocket:test
 ```
 
-CI build image เพื่อตรวจ Dockerfile แต่ไม่ push ไป Docker Hub และไม่ใช้ Docker Hub token
+CI ใช้ QEMU และ Buildx เพื่อ build image สำหรับทั้ง AMD64 และ ARM64 เพื่อตรวจ Dockerfile แต่ไม่ push ไป Docker Hub และไม่ใช้ Docker Hub token
 
 ### Push หรือ merge เข้า `main`
 
 ```yaml
+platforms: linux/amd64,linux/arm64
 push: true
 tags: |
   montonjm/flowpocket:latest
@@ -510,6 +512,21 @@ password: ${{ secrets.DOCKERHUB_TOKEN }}
 | Repository secret | `DOCKERHUB_TOKEN` | Docker Hub access token |
 
 ห้ามใส่ access token โดยตรงใน workflow
+
+ตรวจ multi-platform manifest หลัง workflow บน `main` สำเร็จ:
+
+```bash
+docker buildx imagetools inspect montonjm/flowpocket:latest
+```
+
+ผลลัพธ์ควรมีทั้ง:
+
+```text
+linux/amd64
+linux/arm64
+```
+
+หาก image มีเฉพาะ `linux/amd64` เครื่อง Apple Silicon หรือ ARM server จะพบข้อผิดพลาด `no matching manifest for linux/arm64/v8`
 
 ## 16. ลบ local tags และ images
 
