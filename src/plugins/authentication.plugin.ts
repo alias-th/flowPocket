@@ -1,4 +1,4 @@
-import { FastifyPluginCallback, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyPluginCallback, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
 import { hashToken } from "../utils/token";
 import { Session } from "../entities/session.entity";
@@ -12,7 +12,7 @@ const authenticationPlugin: FastifyPluginCallback = fp(
 
     fastify.decorate(
       "authentication",
-      async function (request: FastifyRequest, _reply: FastifyReply) {
+      async function (request: FastifyRequest) {
         // Get token
         const authorization = request.headers.authorization;
         const match = authorization?.match(/^Bearer\s+(.+)$/i);
