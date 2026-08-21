@@ -692,7 +692,7 @@ docker pull montonjm/flowpocket:sha-0123456789abcdef0123456789abcdef01234567
 docker image inspect montonjm/flowpocket:sha-0123456789abcdef0123456789abcdef01234567
 ```
 
-อย่าทดสอบ production readiness ด้วยการดูว่า workflow เป็นสีเขียวอย่างเดียว ควรเพิ่ม health endpoint และ smoke test container ด้วยเมื่อแอปรองรับ
+อย่าทดสอบ production readiness ด้วยการดูว่า workflow เป็นสีเขียวอย่างเดียว FlowPocket มี `GET /health` และ Docker health check แล้ว ขั้นตอนถัดไปคือเพิ่ม automated smoke test หลัง deployment
 
 ## 17. การออก version และ release
 
@@ -849,7 +849,8 @@ push: false
 
 - [ ] แยก CI, image publishing และ deployment
 - [ ] แยก staging กับ production secrets
-- [ ] มี health check และ smoke test
+- [x] มี health endpoint และ Docker health check
+- [ ] มี automated smoke test หลัง deployment
 - [ ] มี deployment approval สำหรับ production
 - [ ] มี rollback ด้วย image SHA ก่อนหน้า
 - [ ] มีการแจ้งเตือนเมื่อ pipeline หรือ deployment ล้มเหลว
@@ -875,7 +876,7 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 4. เพิ่ม dependency และ container security scan
 5. pin actions ทุกตัวด้วย full commit SHA
 6. เพิ่ม image metadata, SBOM และ provenance
-7. เพิ่ม health endpoint และ smoke test
+7. เพิ่ม automated smoke test ที่เรียก `GET /health` หลัง deployment
 8. แยก publish/deploy workflows และสร้าง GitHub Environments
 9. deploy production ด้วย `sha-*` หรือ digest ไม่ใช้ `latest`
 

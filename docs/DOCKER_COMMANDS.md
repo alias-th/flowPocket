@@ -233,6 +233,40 @@ docker compose -f compose.prod.yaml ps --all
 
 service `migrate` ควรจบด้วย exit code `0` ส่วน `app` และ `postgres` ควรอยู่ในสถานะ running
 
+ตรวจ Docker health status ของ API:
+
+```bash
+docker inspect --format '{{.State.Health.Status}}' flowpocket-api-prod
+```
+
+ตรวจ container status และ health status พร้อมกัน:
+
+```bash
+docker inspect --format 'container={{.State.Status}} health={{.State.Health.Status}}' flowpocket-api-prod
+```
+
+Docker health status มีสามค่า:
+
+| Status | ความหมาย |
+| --- | --- |
+| `starting` | container เริ่มแล้ว แต่ health check ยังไม่สำเร็จหรือยังอยู่ใน start period |
+| `healthy` | health-check command สำเร็จด้วย exit code `0` |
+| `unhealthy` | health check ล้มเหลวติดต่อกันครบจำนวน retries |
+
+ดูผลการตรวจย้อนหลัง:
+
+```bash
+docker inspect --format '{{json .State.Health.Log}}' flowpocket-api-prod
+```
+
+หาก `.State.Health` เป็น `null` หมายถึง container ถูกสร้างจาก image ที่ไม่มี `HEALTHCHECK` ให้ pull image รุ่นใหม่และ recreate container
+
+เรียก application health endpoint โดยตรง:
+
+```bash
+curl --fail --silent --show-error http://localhost:8080/health
+```
+
 ### ดู logs ทุก services
 
 ```bash

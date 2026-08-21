@@ -1,5 +1,42 @@
 # API Design: FlowPocket
 
+## Health
+
+### GET /health
+
+Public readiness endpoint สำหรับ Docker, load balancer และ monitoring ไม่ต้องใช้ authentication
+
+ตรวจทั้ง application process และ PostgreSQL connection ด้วย query `SELECT 1`
+
+#### Response `200 OK`
+
+```json
+{
+  "status": "ok",
+  "checks": {
+    "application": "up",
+    "database": "up"
+  },
+  "uptimeSeconds": 120,
+  "timestamp": "2026-08-21T10:00:00.000Z"
+}
+```
+
+#### Response `503 Service Unavailable`
+
+```json
+{
+  "status": "unavailable",
+  "checks": {
+    "application": "up",
+    "database": "down"
+  },
+  "timestamp": "2026-08-21T10:00:00.000Z"
+}
+```
+
+Docker ไม่ได้อ่าน field `status` ใน JSON โดยตรง แต่ใช้ HTTP status และ exit code ของ `HEALTHCHECK` เพื่อกำหนด container health เป็น `starting`, `healthy` หรือ `unhealthy`
+
 ## Authentication
 
 ### Register
