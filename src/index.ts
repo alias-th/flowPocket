@@ -12,12 +12,12 @@ declare module "fastify" {
     db: DataSource;
     s3: S3Client;
     config: {
-      PORT: string;
-      POSTGRES_HOST: string;
-      POSTGRES_USER: string;
-      POSTGRES_PASSWORD: string;
-      POSTGRES_DB: string;
-      POSTGRES_PORT: string;
+      APP_PORT: string;
+      DB_HOST: string;
+      DB_USER: string;
+      DB_PASSWORD: string;
+      DB_NAME: string;
+      DB_PORT: string;
       SESSION_TOKEN_SECRET: string;
       S3_ACCOUNT_ID: string;
       S3_ACCESS_KEY_ID: string;
@@ -40,7 +40,7 @@ const start = async () => {
   const app = await buildApp();
 
   await app.listen({
-    port: Number(app.config.PORT),
+    port: Number(app.config.APP_PORT),
     host: "0.0.0.0",
   });
 

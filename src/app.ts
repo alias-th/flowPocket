@@ -26,31 +26,31 @@ const envOptions = {
   schema: {
     type: "object",
     required: [
-      "POSTGRES_HOST",
-      "POSTGRES_USER",
-      "POSTGRES_PASSWORD",
-      "POSTGRES_DB",
-      "POSTGRES_PORT",
+      "DB_HOST",
+      "DB_USER",
+      "DB_PASSWORD",
+      "DB_NAME",
+      "DB_PORT",
       "SESSION_TOKEN_SECRET",
     ],
     properties: {
-      PORT: {
+      APP_PORT: {
         type: "string",
         default: "8080",
       },
-      POSTGRES_HOST: {
+      DB_HOST: {
         type: "string",
       },
-      POSTGRES_USER: {
+      DB_USER: {
         type: "string",
       },
-      POSTGRES_PASSWORD: {
+      DB_PASSWORD: {
         type: "string",
       },
-      POSTGRES_DB: {
+      DB_NAME: {
         type: "string",
       },
-      POSTGRES_PORT: {
+      DB_PORT: {
         type: "string",
       },
       SESSION_TOKEN_SECRET: {

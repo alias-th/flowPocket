@@ -12,11 +12,11 @@ import { User } from "../entities/user.entity";
 export default fp(async function databasePlugin(fastify) {
   const dataSource = new DataSource({
     type: "postgres",
-    host: fastify.config.POSTGRES_HOST,
-    port: Number(fastify.config.POSTGRES_PORT),
-    username: fastify.config.POSTGRES_USER,
-    password: fastify.config.POSTGRES_PASSWORD,
-    database: fastify.config.POSTGRES_DB,
+    host: fastify.config.DB_HOST,
+    port: Number(fastify.config.DB_PORT),
+    username: fastify.config.DB_USER,
+    password: fastify.config.DB_PASSWORD,
+    database: fastify.config.DB_NAME,
     entities: [Account, Budget, Category, Image, Session, Transaction, User],
     synchronize: false,
     logging: process.env.NODE_ENV !== "production",

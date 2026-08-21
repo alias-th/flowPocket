@@ -46,8 +46,10 @@ export const getSessions = async (
           deviceName: item.deviceName,
           ipAddress: item.ipAddress,
           createdAt: item.createdAt,
-          expiresAt: item.expiresAt,
-          revokedAt: item.revokedAt,
+          accessTokenExpiresAt: item.accessTokenExpiresAt,
+          accessTokenRevokedAt: item.accessTokenRevokedAt,
+          refreshTokenExpiresAt: item.refreshTokenExpiresAt,
+          refreshTokenRevokedAt: item.refreshTokenRevokedAt,
           isCurrent: item.id === request.sessionId,
         };
       }),
@@ -75,12 +77,12 @@ export const deleteSessionById = async (
   const session = await sessionRepo.findOneBy({
     id: sessionId,
     userId,
-    revokedAt: IsNull(),
+    accessTokenRevokedAt: IsNull(),
   });
   if (!session) {
     throw new AppError(404, req.t("session.notFound"));
   }
-  session.revokedAt = new Date();
+  session.accessTokenRevokedAt = new Date();
   await sessionRepo.save(session);
 
   return reply.code(200).send(success(req.t("session.delete.success")));
