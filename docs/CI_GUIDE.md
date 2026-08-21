@@ -107,35 +107,39 @@ git add package.json package-lock.json
 
 ### 3.2 มีคำสั่งมาตรฐานใน `package.json`
 
-ปัจจุบัน FlowPocket มีคำสั่ง build:
+ปัจจุบัน FlowPocket มีคำสั่ง lint, แก้ lint อัตโนมัติ และ build:
 
 ```json
 {
   "scripts": {
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
     "build": "tsc -p tsconfig.build.json"
   }
 }
 ```
 
-CI จึงสามารถรันได้ด้วย:
+CI จึงสามารถตรวจ lint และ build ได้ด้วย:
 
 ```bash
+npm run lint
 npm run build
 ```
 
-สำหรับ production CI ที่สมบูรณ์ควรเพิ่ม commands ต่อไปนี้เมื่อโปรเจกต์มีเครื่องมือรองรับแล้ว:
+ส่วนที่ยังต้องเพิ่มเพื่อให้ production CI สมบูรณ์คือ automated tests:
 
 ```json
 {
   "scripts": {
-    "lint": "LINT_COMMAND",
     "test": "TEST_COMMAND",
     "test:ci": "NON_WATCH_CI_TEST_COMMAND"
   }
 }
 ```
 
-อย่าเพิ่ม CI step ที่เรียก `npm run lint` หรือ `npm run test:ci` จนกว่าจะมี script จริงและสามารถรันผ่านในเครื่องได้
+อย่าเพิ่ม CI step ที่เรียก `npm run test:ci` จนกว่าจะมี test runner และ script จริงที่สามารถรันผ่านในเครื่องได้
+
+ESLint ใช้ Flat Config ที่ `eslint.config.mjs` และตรวจไฟล์ `src/**/*.ts` ด้วย recommended rules ของ ESLint และ typescript-eslint
 
 ### 3.3 ทดสอบ local quality gate
 
@@ -143,11 +147,12 @@ npm run build
 
 ```bash
 npm ci
+npm run lint
 npm run build
 docker build --tag flowpocket:local .
 ```
 
-เมื่อเพิ่ม lint และ tests แล้ว quality gate ในเครื่องควรเป็น:
+เมื่อเพิ่ม automated tests แล้ว quality gate ในเครื่องควรเป็น:
 
 ```bash
 npm ci
@@ -273,6 +278,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint source code
+        run: npm run lint
 
       - name: Build application
         run: npm run build
@@ -421,12 +429,12 @@ concurrency:
 
 สำหรับ deployment production ไม่ควรใช้รูปแบบเดียวกันโดยอัตโนมัติ เพราะการยกเลิกกลาง deployment อาจทำให้ระบบอยู่ในสถานะไม่สมบูรณ์ ควรใช้ deployment-specific concurrency ที่รอเป็นคิว
 
-## 9. เพิ่ม lint และ automated tests
+## 9. Lint ที่มีแล้วและ automated tests ที่ต้องเพิ่ม
 
-CI production ไม่ควรมีเพียง compiler ต้องตรวจพฤติกรรมของระบบด้วย ลำดับที่แนะนำคือ:
+FlowPocket รัน ESLint ใน CI แล้ว แต่ lint ตรวจรูปแบบและข้อผิดพลาดเชิงสถิติบางประเภทเท่านั้น ยังไม่สามารถยืนยันพฤติกรรมของระบบแทน automated tests ได้ ลำดับเป้าหมายคือ:
 
 ```yaml
-- name: Lint
+- name: Lint source code
   run: npm run lint
 
 - name: Run automated tests
@@ -436,7 +444,7 @@ CI production ไม่ควรมีเพียง compiler ต้องต�
   run: npm run build
 ```
 
-ก่อนเพิ่ม YAML ต้องเลือกและตั้งค่าเครื่องมือจริง เช่น ESLint และ test runner พร้อมเพิ่ม scripts ใน `package.json`
+ขั้นตอนถัดไปคือต้องเลือกและตั้งค่า test runner พร้อมเพิ่ม `test` และ `test:ci` scripts ใน `package.json` ก่อนเพิ่ม test step ใน workflow
 
 หลักของ test command ใน CI:
 
@@ -796,32 +804,32 @@ push: false
 
 ### Source และ dependencies
 
-- [ ] commit `package-lock.json`
-- [ ] ใช้ `npm ci`
-- [ ] กำหนด Node.js major version ตรงกับ Dockerfile
-- [ ] มี lint script และ lint ผ่าน
+- [x] commit `package-lock.json`
+- [x] ใช้ `npm ci`
+- [x] กำหนด Node.js major version ตรงกับ Dockerfile
+- [x] มี lint script และ lint ผ่าน
 - [ ] มี automated tests และ test ผ่าน
-- [ ] build TypeScript ผ่าน
+- [x] build TypeScript ผ่าน
 
 ### Docker
 
-- [ ] Dockerfile เป็น multi-stage build
-- [ ] `.dockerignore` ตัด secrets และไฟล์ไม่จำเป็น
-- [ ] PR build image แต่ไม่ push
-- [ ] `main` push image แบบ `sha-*`
+- [x] Dockerfile เป็น multi-stage build
+- [x] `.dockerignore` ตัด secrets และไฟล์ไม่จำเป็น
+- [x] PR build image แต่ไม่ push
+- [x] `main` push image แบบ `sha-*`
 - [ ] production deploy ด้วย immutable tag หรือ digest
 - [ ] มี container vulnerability scan
 - [ ] มี SBOM และ provenance ตามนโยบายทีม
 
 ### GitHub Actions security
 
-- [ ] กำหนด `permissions` แบบ least privilege
-- [ ] secrets อยู่ใน GitHub Secrets
-- [ ] secrets ไม่ถูกส่งเข้า PR jobs โดยไม่จำเป็น
+- [x] กำหนด `permissions` แบบ least privilege
+- [x] secrets อยู่ใน GitHub Secrets
+- [x] secrets ไม่ถูกส่งเข้า PR jobs โดยไม่จำเป็น
 - [ ] actions ถูก pin ด้วย full commit SHA
 - [ ] จำกัด actions ที่ repository อนุญาต
 - [ ] เปิด dependency และ secret scanning ตามความสามารถของ repository
-- [ ] มี concurrency ที่เหมาะกับ CI
+- [x] มี concurrency ที่เหมาะกับ CI
 
 ### Repository governance
 
@@ -846,6 +854,7 @@ push: false
 FlowPocket มี baseline ต่อไปนี้แล้ว:
 
 - `npm ci`
+- ESLint ด้วย `npm run lint`
 - TypeScript build
 - Docker build บน Pull Request
 - Docker Hub login เฉพาะ push เข้า `main`
@@ -855,7 +864,7 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 
 ลำดับที่แนะนำให้ทำต่อ:
 
-1. เพิ่ม lint พร้อมแก้โค้ดให้ผ่าน
+1. ตั้ง Ruleset สำหรับ `main` และบังคับ required check `build`
 2. เพิ่ม unit tests และ integration tests ที่จำเป็น
 3. แยก `quality` กับ `docker` jobs
 4. เพิ่ม dependency และ container security scan
@@ -873,3 +882,8 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 - [Dependency caching](https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching)
 - [Docker Build GitHub Actions](https://docs.docker.com/build/ci/github-actions/)
 - [Docker: Add SBOM and provenance attestations](https://docs.docker.com/build/ci/github-actions/attestations/)
+- [คู่มือตั้ง Branch Protection Ruleset](./BRANCH_PROTECTION_RULESET.md)
+- [Useful Docker Commands สำหรับ FlowPocket](./DOCKER_COMMANDS.md)
+- [คู่มือ Docker Hub: Build, Tag, Push และ Pull](./DOCKER_HUB_GUIDE.md)
+- [คู่มือ Dockerfile และ Docker Compose](./DOCKERFILE_COMPOSE_GUIDE.md)
+- [Useful Git Commands สำหรับ FlowPocket](./GIT_COMMANDS.md)
