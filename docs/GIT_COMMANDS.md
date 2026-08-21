@@ -94,14 +94,14 @@ git status --short
 
 สัญลักษณ์ที่พบบ่อย:
 
-| สัญลักษณ์ | ความหมาย |
-| --- | --- |
-| `??` | ไฟล์ใหม่ที่ Git ยังไม่ติดตาม |
-| ` M` | แก้ไฟล์แล้วแต่ยังไม่ stage |
-| `M ` | แก้ไฟล์และ stage แล้ว |
-| `A ` | เพิ่มไฟล์ใหม่เข้า staging area |
-| `D ` | ลบไฟล์และ stage แล้ว |
-| `UU` | มี merge conflict |
+| สัญลักษณ์ | ความหมาย                       |
+| --------- | ------------------------------ |
+| `??`      | ไฟล์ใหม่ที่ Git ยังไม่ติดตาม   |
+| ` M`      | แก้ไฟล์แล้วแต่ยังไม่ stage     |
+| `M `      | แก้ไฟล์และ stage แล้ว          |
+| `A `      | เพิ่มไฟล์ใหม่เข้า staging area |
+| `D `      | ลบไฟล์และ stage แล้ว           |
+| `UU`      | มี merge conflict              |
 
 ดู branch ปัจจุบัน:
 
@@ -169,6 +169,16 @@ git pull --ff-only origin main
 ```
 
 `--ff-only` จะหยุดหาก local และ remote แยกประวัติกัน แทนการสร้าง merge commit อัตโนมัติ
+
+Error:
+
+```text
+      C  local
+     /
+A---B
+     \
+      D  origin/main
+```
 
 ## 6. Branches
 
@@ -322,15 +332,15 @@ git commit -m "docs: add Docker deployment guide"
 
 ตัวอย่าง Conventional Commit prefixes:
 
-| Prefix | ใช้เมื่อ |
-| --- | --- |
-| `feat:` | เพิ่มความสามารถใหม่ |
-| `fix:` | แก้ bug |
-| `docs:` | แก้เอกสาร |
-| `ci:` | แก้ CI/CD workflow |
-| `test:` | เพิ่มหรือแก้ tests |
+| Prefix      | ใช้เมื่อ                            |
+| ----------- | ----------------------------------- |
+| `feat:`     | เพิ่มความสามารถใหม่                 |
+| `fix:`      | แก้ bug                             |
+| `docs:`     | แก้เอกสาร                           |
+| `ci:`       | แก้ CI/CD workflow                  |
+| `test:`     | เพิ่มหรือแก้ tests                  |
 | `refactor:` | ปรับโครงสร้างโดยไม่เปลี่ยน behavior |
-| `chore:` | งานดูแลทั่วไป |
+| `chore:`    | งานดูแลทั่วไป                       |
 
 แก้ข้อความ commit ล่าสุดก่อน push:
 
@@ -669,14 +679,14 @@ git log --patch -- compose.prod.yaml
 
 ตรวจ target, branch และ `git status` ก่อนใช้คำสั่งต่อไปนี้:
 
-| คำสั่ง | ความเสี่ยง |
-| --- | --- |
-| `git restore FILE` | ทิ้งการแก้ที่ยังไม่ commit |
-| `git reset --hard` | ทิ้ง tracked changes และย้าย branch |
-| `git clean -fd` | ลบ untracked files/directories |
-| `git push --force` | เขียนทับ remote history |
-| `git branch -D` | ลบ branch แม้ยังไม่ merge |
-| `git stash drop/clear` | ลบ stash ที่กู้คืนยาก |
+| คำสั่ง                 | ความเสี่ยง                          |
+| ---------------------- | ----------------------------------- |
+| `git restore FILE`     | ทิ้งการแก้ที่ยังไม่ commit          |
+| `git reset --hard`     | ทิ้ง tracked changes และย้าย branch |
+| `git clean -fd`        | ลบ untracked files/directories      |
+| `git push --force`     | เขียนทับ remote history             |
+| `git branch -D`        | ลบ branch แม้ยังไม่ merge           |
+| `git stash drop/clear` | ลบ stash ที่กู้คืนยาก               |
 
 สำหรับ shared branches:
 
@@ -687,21 +697,21 @@ git log --patch -- compose.prod.yaml
 
 ## Quick reference
 
-| งาน | คำสั่ง |
-| --- | --- |
-| ดูสถานะ | `git status --short` |
-| ดู branch ปัจจุบัน | `git branch --show-current` |
-| อัปเดต remote state | `git fetch origin` |
-| อัปเดต `main` | `git pull --ff-only origin main` |
-| สร้าง branch | `git switch -c feature/add-health-check` |
-| ดู diff | `git diff` |
-| ตรวจ whitespace | `git diff --check` |
-| Stage ไฟล์ | `git add FILE` |
-| Commit | `git commit -m "docs: update guide"` |
-| Push ครั้งแรก | `git push -u origin BRANCH_NAME` |
-| ดู PR commits | `git log --oneline origin/main..HEAD` |
-| ย้อน shared commit | `git revert COMMIT_SHA` |
-| ดู recovery history | `git reflog` |
+| งาน                 | คำสั่ง                                   |
+| ------------------- | ---------------------------------------- |
+| ดูสถานะ             | `git status --short`                     |
+| ดู branch ปัจจุบัน  | `git branch --show-current`              |
+| อัปเดต remote state | `git fetch origin`                       |
+| อัปเดต `main`       | `git pull --ff-only origin main`         |
+| สร้าง branch        | `git switch -c feature/add-health-check` |
+| ดู diff             | `git diff`                               |
+| ตรวจ whitespace     | `git diff --check`                       |
+| Stage ไฟล์          | `git add FILE`                           |
+| Commit              | `git commit -m "docs: update guide"`     |
+| Push ครั้งแรก       | `git push -u origin BRANCH_NAME`         |
+| ดู PR commits       | `git log --oneline origin/main..HEAD`    |
+| ย้อน shared commit  | `git revert COMMIT_SHA`                  |
+| ดู recovery history | `git reflog`                             |
 
 ## เอกสารที่เกี่ยวข้อง
 
