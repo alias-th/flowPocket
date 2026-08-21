@@ -19,6 +19,7 @@ import sessionRoutes from "./routes/session";
 import Joi from "joi";
 import { formatJoiError } from "./utils/validation";
 import databasePlugin from "./plugins/database.plugin";
+import healthRoutes from "./routes/health";
 
 type RequestError = Error & {
   code?: string;
@@ -150,6 +151,7 @@ async function buildApp() {
   });
 
   // Register routes
+  fastify.register(healthRoutes);
   const apiVersion = "/api/v1";
   fastify.register(authRoutes, { prefix: `${apiVersion}/auth` });
   fastify.register(accountRoutes, { prefix: `${apiVersion}/accounts` });
