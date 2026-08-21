@@ -31,5 +31,5 @@ export class BackFillFeatRefreshToken1787201654662 implements MigrationInterface
   `);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(): Promise<void> {}
 }

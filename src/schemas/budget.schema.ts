@@ -2,7 +2,6 @@ import Joi from "joi";
 
 const uuidSchema = Joi.string().uuid({ version: ["uuidv4"] });
 const amountSchema = Joi.number().positive().precision(2);
-const budgetDateSchema = Joi.date().iso();
 
 export const createBudgetSchema = Joi.object({
   categoryId: uuidSchema.required(),

@@ -12,7 +12,6 @@ import { fail } from "./utils/response";
 import protectRoutePlugin from "./plugins/authentication.plugin";
 import categoryRoutes from "./routes/category";
 import transactionRoutes from "./routes/transaction";
-import imageRoutes from "./routes/image";
 import budgetRoutes from "./routes/budget";
 import reportRoutes from "./routes/report";
 import s3Storage from "./plugins/s3.plugin";
@@ -20,6 +19,12 @@ import sessionRoutes from "./routes/session";
 import Joi from "joi";
 import { formatJoiError } from "./utils/validation";
 import databasePlugin from "./plugins/database.plugin";
+
+type RequestError = Error & {
+  code?: string;
+  statusCode?: number;
+  details?: { field: string; message: string }[];
+};
 
 const envOptions = {
   dotenv: true,
@@ -150,13 +155,12 @@ async function buildApp() {
   fastify.register(accountRoutes, { prefix: `${apiVersion}/accounts` });
   fastify.register(categoryRoutes, { prefix: `${apiVersion}/categories` });
   fastify.register(transactionRoutes, { prefix: `${apiVersion}/transactions` });
-  fastify.register(imageRoutes, { prefix: `${apiVersion}/images` });
   fastify.register(budgetRoutes, { prefix: `${apiVersion}/budgets` });
   fastify.register(sessionRoutes, { prefix: `${apiVersion}/sessions` });
   fastify.register(reportRoutes, { prefix: `${apiVersion}/reports` });
 
   // Set global error handlers
-  fastify.setErrorHandler(async (error: any, request, reply) => {
+  fastify.setErrorHandler<RequestError>(async (error, request, reply) => {
     request.log.error({ err: error }, "Request failed");
 
     if (error.code === "FST_ERR_VALIDATION" && Joi.isError(error)) {
