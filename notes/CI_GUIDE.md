@@ -22,11 +22,11 @@
 
 สถานะที่ตรวจสอบล่าสุดเมื่อ 22 สิงหาคม 2026:
 
-- GitHub Actions run ล่าสุดจาก Pull Request คือ [run #15](https://github.com/alias-th/flowPocket/actions/runs/32549481811) และจบด้วย `success`
-- GitHub Actions run ล่าสุดบน `main` คือ [run #13](https://github.com/alias-th/flowPocket/actions/runs/32495469892) สำหรับ commit `c26dfacd3ec489a2a02333109108cd5043f889c7` และจบด้วย `success`
-- Docker Hub มี tag `latest` และ `sha-c26dfacd3ec489a2a02333109108cd5043f889c7` ซึ่งชี้ digest เดียวกัน และรองรับ `linux/amd64` กับ `linux/arm64`
+- GitHub Actions run ล่าสุดจาก Pull Request ที่รวม test steps คือ [run #18](https://github.com/alias-th/flowPocket/actions/runs/32552030157) และจบด้วย `success`
+- GitHub Actions run ล่าสุดบน `main` คือ [run #19](https://github.com/alias-th/flowPocket/actions/runs/32552277942) สำหรับ commit `d1ee51bf6352b5466476035f3d8dab822605325b` และจบด้วย `success`
+- Docker Hub มี tag `latest` และ `sha-d1ee51bf6352b5466476035f3d8dab822605325b` ซึ่งชี้ digest `sha256:f46910347a6a5c7241d9a020698b8248574aaff46ae9637311a18ad12bb28a02` เดียวกัน และรองรับ `linux/amd64` กับ `linux/arm64`
 - Ruleset [`Protect main`](https://github.com/alias-th/flowPocket/rules/21139308) มีสถานะ `active` และใช้กับ default branch
-- local quality gate ที่มี lint, test type-check, automated tests 2 รายการ และ application build ผ่านแล้ว ส่วน GitHub Actions run ที่รวม test steps ต้องยืนยันอีกครั้งหลัง push การเปลี่ยนแปลงนี้
+- local quality gate และ GitHub Actions ที่มี lint, test type-check, automated tests 2 รายการ, application build และ multi-platform Docker build ผ่านแล้ว
 
 เมื่อ workflow จริงเปลี่ยน ต้องอัปเดตตัวอย่างและ checklist ในเอกสารนี้พร้อมกัน โดยให้ `.github/workflows/docker.yml` และ `package.json` เป็น source of truth สำหรับสิ่งที่ CI รันจริง
 
@@ -899,15 +899,16 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 
 ลำดับที่แนะนำให้ทำต่อ:
 
-1. เพิ่ม unit tests ของ business rules และ integration tests ที่เชื่อม PostgreSQL test database
-2. ยืนยัน GitHub Actions run ที่มี test steps ว่าผ่านหลัง push การเปลี่ยนแปลง
-3. แยก `quality` กับ `docker` jobs เพื่อให้ผลแต่ละหน้าที่ชัดเจน
-4. เพิ่ม dependency และ container security scan
-5. pin actions ทุกตัวด้วย full commit SHA
-6. เพิ่ม image metadata, SBOM และ provenance
-7. เพิ่ม automated smoke test ที่เรียก `GET /health` หลัง deployment
-8. แยก publish/deploy workflows และสร้าง GitHub Environments
-9. deploy production ด้วย `sha-*` หรือ digest ไม่ใช้ `latest`
+1. เตรียม Ubuntu VPS และ deploy `sha-d1ee51bf6352b5466476035f3d8dab822605325b` ด้วย `compose.prod.yaml`
+2. ตรวจ PostgreSQL health, migration exit code, application health และ persistence ของ `postgres_prod_data`
+3. เพิ่ม automated smoke test ที่เรียก `GET /health` หลัง deployment
+4. วางแผน backup/restore, TLS, firewall และ rollback ก่อนรับ production traffic จริง
+5. แยก `quality` กับ `docker` jobs เพื่อให้ผลแต่ละหน้าที่ชัดเจน
+6. เพิ่ม dependency และ container security scan
+7. pin actions ทุกตัวด้วย full commit SHA
+8. เพิ่ม image metadata, SBOM และ provenance
+9. เพิ่ม unit tests ของ business rules และ integration tests ที่เชื่อม PostgreSQL test database
+10. แยก publish/deploy workflows และสร้าง GitHub Environments
 
 ## เอกสารอ้างอิง
 
