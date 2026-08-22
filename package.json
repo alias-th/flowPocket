@@ -11,8 +11,11 @@
     "migration:revert": "npm run typeorm -- migration:revert -d ./src/datasource.ts",
     "migration:show": "npm run typeorm -- migration:show -d ./src/datasource.ts",
     "dev": "tsx watch src/index.ts",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint src test --max-warnings=0",
     "lint:fix": "eslint src --fix",
+    "test": "tsx --test test/*.test.ts",
+    "test:ci": "tsx --test test/*.test.ts",
+    "typecheck:test": "tsc -p tsconfig.test.json",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js"
   },

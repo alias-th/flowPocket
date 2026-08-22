@@ -9,7 +9,7 @@ export default defineConfig(
     ignores: ["dist/**", "node_modules/**", "coverage/**"],
   },
   {
-    files: ["src/**/*.ts"],
+    files: ["src/**/*.ts", "test/**/*.ts"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
   },
 );
