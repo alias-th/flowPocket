@@ -36,6 +36,12 @@ jobs:
       - name: Lint source code
         run: npm run lint
 
+      - name: Type-check tests
+        run: npm run typecheck:test
+
+      - name: Run automated tests
+        run: npm run test:ci
+
       - name: Build application
         run: npm run build
 
