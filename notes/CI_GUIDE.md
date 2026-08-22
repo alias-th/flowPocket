@@ -1,10 +1,22 @@
 # คู่มือสร้าง Continuous Integration (CI) สำหรับ FlowPocket
 
-คู่มือนี้สอนสร้าง CI ด้วย GitHub Actions ตั้งแต่แนวคิด การเตรียมโปรเจกต์ การตรวจ Pull Request การ build Docker image การเผยแพร่ image ไป Docker Hub ไปจนถึงการป้องกัน branch แบบที่ใกล้เคียงระบบ production จริง
+คู่มือนี้อธิบาย CI ของ FlowPocket ด้วย GitHub Actions ตั้งแต่การเตรียมโปรเจกต์ การตรวจ Pull Request การ build Docker image การเผยแพร่ image ไป Docker Hub ไปจนถึงการป้องกัน branch แบบที่ใกล้เคียงระบบ production จริง
 
 เนื้อหาอ้างอิงโครงสร้างปัจจุบันของ FlowPocket ซึ่งเป็น Node.js, TypeScript และ Docker โดยใช้ branch `main` เป็น branch หลัก
 
 > CI มีหน้าที่ตรวจสอบและสร้าง artifact ส่วนการนำ artifact ไปติดตั้งบน staging หรือ production เป็น Continuous Delivery/Deployment (CD) ซึ่งควรแยก workflow และสิทธิ์ออกจาก CI
+
+### สถานะปัจจุบันของ FlowPocket
+
+ไฟล์ workflow ที่ใช้งานจริงคือ `.github/workflows/docker.yml` และมี job `build` เพียง job เดียว:
+
+- Pull Request เข้า `main`: `npm ci`, lint, TypeScript build และ multi-platform Docker build โดยไม่ push image
+- Push เข้า `main`: ทำ checks ชุดเดียวกัน แล้ว push `latest` และ `sha-${COMMIT_SHA}` ไป Docker Hub
+- มี Docker layer cache เฉพาะขั้นตอน build-and-push ของ event `push`
+- ยังไม่มี automated tests, dependency audit, container scan, SBOM, provenance หรือ deployment workflow
+- `npm run build` เป็น TypeScript compilation check ปัจจุบัน เพราะยังไม่มี `typecheck` script แยก
+
+เมื่อ workflow จริงเปลี่ยน ต้องอัปเดตตัวอย่างและ checklist ในเอกสารนี้พร้อมกัน โดยให้ `.github/workflows/docker.yml` และ `package.json` เป็น source of truth สำหรับสิ่งที่ CI รันจริง
 
 ## เป้าหมายของระบบ
 
@@ -18,7 +30,7 @@ Developer
             ▼
        GitHub Actions CI
             ├── npm ci
-            ├── lint                 (เป้าหมายถัดไป)
+            ├── lint
             ├── automated tests      (เป้าหมายถัดไป)
             ├── TypeScript build
             ├── Docker build
@@ -126,7 +138,7 @@ npm run lint
 npm run build
 ```
 
-ส่วนที่ยังต้องเพิ่มเพื่อให้ production CI สมบูรณ์คือ automated tests:
+ปัจจุบันยังไม่มี `typecheck`, `test` หรือ `test:ci` scripts โดย `npm run build` ทำหน้าที่ compile และตรวจ TypeScript อยู่แล้ว ส่วนที่ยังต้องเพิ่มเพื่อให้ CI ตรวจพฤติกรรมของระบบได้คือ automated tests:
 
 ```json
 {
@@ -137,7 +149,7 @@ npm run build
 }
 ```
 
-อย่าเพิ่ม CI step ที่เรียก `npm run test:ci` จนกว่าจะมี test runner และ script จริงที่สามารถรันผ่านในเครื่องได้
+ตัวอย่างด้านบนเป็น placeholder สำหรับอธิบายโครงสร้างเท่านั้น อย่าคัดลอก `TEST_COMMAND` ลง `package.json` และอย่าเพิ่ม CI step ที่เรียก `npm run test:ci` จนกว่าจะมี test runner, tests และ script จริงที่สามารถรันผ่านในเครื่องได้
 
 ESLint ใช้ Flat Config ที่ `eslint.config.mjs` และตรวจไฟล์ `src/**/*.ts` ด้วย recommended rules ของ ESLint และ typescript-eslint
 
@@ -321,7 +333,9 @@ jobs:
           cache-to: type=gha,mode=max
 ```
 
-นี่คือ workflow ปัจจุบันของ FlowPocket และเป็น baseline ที่ใช้งานได้จริง ส่วนต่อไปจะอธิบายแต่ละส่วนและแนวทางยกระดับให้เหมาะกับ production
+นี่คือ workflow ปัจจุบันของ FlowPocket ส่วนต่อไปจะอธิบายแต่ละส่วนและแนวทางยกระดับให้เหมาะกับ production หากไฟล์จริงกับตัวอย่างต่างกัน ให้ยึด `.github/workflows/docker.yml` เป็นหลักและอัปเดตเอกสารนี้
+
+> Action major versions ในตัวอย่างสะท้อน workflow ณ เวลาที่อัปเดตเอกสาร ก่อนเปลี่ยน version ให้ตรวจ release notes และ runtime requirement ของ action จาก repository ทางการ แล้วทดสอบใน Pull Request
 
 ## 7. ทำความเข้าใจ workflow ทีละส่วน
 
@@ -434,9 +448,9 @@ concurrency:
 
 สำหรับ deployment production ไม่ควรใช้รูปแบบเดียวกันโดยอัตโนมัติ เพราะการยกเลิกกลาง deployment อาจทำให้ระบบอยู่ในสถานะไม่สมบูรณ์ ควรใช้ deployment-specific concurrency ที่รอเป็นคิว
 
-## 9. Lint ที่มีแล้วและ automated tests ที่ต้องเพิ่ม
+## 9. Quality gates ที่มีแล้วและ automated tests ที่ต้องเพิ่ม
 
-FlowPocket รัน ESLint ใน CI แล้ว แต่ lint ตรวจรูปแบบและข้อผิดพลาดเชิงสถิติบางประเภทเท่านั้น ยังไม่สามารถยืนยันพฤติกรรมของระบบแทน automated tests ได้ ลำดับเป้าหมายคือ:
+FlowPocket รัน ESLint และ TypeScript build ใน CI แล้ว แต่ checks เหล่านี้ตรวจแทนพฤติกรรมของระบบไม่ได้ หลังตั้ง test runner และเพิ่ม tests จริง ลำดับ quality steps ควรเป็น:
 
 ```yaml
 - name: Lint source code
@@ -464,7 +478,7 @@ FlowPocket รัน ESLint ใน CI แล้ว แต่ lint ตรวจ�
 ```yaml
 services:
   postgres:
-    image: postgres:17.6-alpine
+    image: postgres:16-alpine
     env:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
@@ -478,7 +492,7 @@ services:
       --health-retries 5
 ```
 
-ใช้ credentials สำหรับ test เท่านั้น ห้ามใช้ production database หรือ production secrets ใน CI tests
+ใช้ PostgreSQL major version เดียวกับ `compose.prod.yaml` เพื่อลดความต่างของ environment และใช้ credentials สำหรับ test เท่านั้น ห้ามใช้ production database หรือ production secrets ใน CI tests
 
 ## 10. แยก jobs สำหรับ quality และ Docker
 
@@ -639,9 +653,12 @@ git switch -c feature/add-health-check
 
 ```bash
 npm ci
+npm run lint
 npm run build
 docker build --tag flowpocket:local .
 ```
+
+ตอนนี้ยังไม่มี automated test command เมื่อเพิ่มแล้วให้แทรก `npm run test:ci` ก่อน `npm run build`
 
 commit และ push:
 
@@ -668,7 +685,7 @@ git push -u origin feature/add-health-check
 ตรวจว่า:
 
 - workflow เริ่มเมื่อเปิด PR เข้า `main`
-- `npm ci` และ `npm run build` ผ่าน
+- `npm ci`, `npm run lint` และ `npm run build` ผ่าน
 - Docker image build ผ่านแต่ไม่ถูก push ไป Docker Hub
 - workflow ไม่พยายามอ่าน `DOCKERHUB_TOKEN`
 - Ruleset ป้องกัน merge เมื่อ check ล้มเหลว
@@ -812,9 +829,9 @@ push: false
 - [x] commit `package-lock.json`
 - [x] ใช้ `npm ci`
 - [x] กำหนด Node.js major version ตรงกับ Dockerfile
-- [x] มี lint script และ lint ผ่าน
+- [x] มี lint script และเรียกใช้ใน workflow
 - [ ] มี automated tests และ test ผ่าน
-- [x] build TypeScript ผ่าน
+- [x] มี TypeScript build script และเรียกใช้ใน workflow
 
 ### Docker
 
@@ -865,14 +882,14 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 - Docker build บน Pull Request
 - Docker Hub login เฉพาะ push เข้า `main`
 - push tags `latest` และ `sha-*`
-- GitHub Actions cache สำหรับ Docker layers
+- GitHub Actions cache สำหรับ Docker layers ใน main push path
 - workflow concurrency เพื่อยกเลิก run เก่าของ ref เดิม
 
 ลำดับที่แนะนำให้ทำต่อ:
 
-1. ตั้ง Ruleset สำหรับ `main` และบังคับ required check `build`
-2. เพิ่ม unit tests และ integration tests ที่จำเป็น
-3. แยก `quality` กับ `docker` jobs
+1. เพิ่ม unit tests และ integration tests ที่จำเป็น พร้อม `test:ci` script
+2. ตั้ง Ruleset สำหรับ `main` และบังคับ required check `build`
+3. แยก `quality` กับ `docker` jobs เมื่อเพิ่ม tests แล้ว
 4. เพิ่ม dependency และ container security scan
 5. pin actions ทุกตัวด้วย full commit SHA
 6. เพิ่ม image metadata, SBOM และ provenance
@@ -886,6 +903,10 @@ FlowPocket มี baseline ต่อไปนี้แล้ว:
 - [GitHub Actions secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
 - [Control workflow concurrency](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)
 - [Dependency caching](https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching)
+- [actions/checkout](https://github.com/actions/checkout)
+- [actions/setup-node](https://github.com/actions/setup-node)
+- [docker/login-action](https://github.com/docker/login-action)
+- [docker/build-push-action](https://github.com/docker/build-push-action)
 - [Docker Build GitHub Actions](https://docs.docker.com/build/ci/github-actions/)
 - [Docker: Add SBOM and provenance attestations](https://docs.docker.com/build/ci/github-actions/attestations/)
 - [คู่มือตั้ง Branch Protection Ruleset](./BRANCH_PROTECTION_RULESET.md)
